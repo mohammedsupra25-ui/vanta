@@ -1,0 +1,347 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   GLOBAL RESETS & BASE
+───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  background-color: #000000;
+}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Syne', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+  min-height: 100vh;
+}
+
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM SCROLLBAR
+───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333333;
+}
+
+/* ─────────────────────────────────────────────
+   NOISE / GRAIN OVERLAY
+───────────────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+───────────────────────────────────────────── */
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(72px, 11vw, 150px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 5.5vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.stat-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 1;
+}
+
+.label-caps {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #888888;
+}
+
+/* ─────────────────────────────────────────────
+   CLIP PATH REVEAL
+───────────────────────────────────────────── */
+.clip-reveal {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.clip-reveal-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  will-change: transform;
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border: 1px solid #ffffff;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #ffffff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION SPACING
+───────────────────────────────────────────── */
+.section-padding {
+  padding-top: clamp(80px, 10vw, 140px);
+  padding-bottom: clamp(80px, 10vw, 140px);
+}
+
+/* ─────────────────────────────────────────────
+   TICKER
+───────────────────────────────────────────── */
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+/* ─────────────────────────────────────────────
+   PLAN CARD
+───────────────────────────────────────────── */
+.plan-card {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.plan-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateY(-6px);
+}
+
+.plan-card.featured {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 60px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+/* ─────────────────────────────────────────────
+   TESTIMONIAL CARD
+───────────────────────────────────────────── */
+.testimonial-card {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  width: 360px;
+  transition: border-color 0.3s ease;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ─────────────────────────────────────────────
+   FAQ ACCORDION
+───────────────────────────────────────────── */
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ─────────────────────────────────────────────
+   NAV UNDERLINE
+───────────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888888;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #ffffff;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────
+   GSAP INITIAL STATES
+───────────────────────────────────────────── */
+.gsap-fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ─────────────────────────────────────────────
+   PARTICLES CONTAINER
+───────────────────────────────────────────── */
+#tsparticles {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+}
+
+/* ─────────────────────────────────────────────
+   NO SCROLLBAR UTILITY
+───────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─────────────────────────────────────────────
+   SELECTION
+───────────────────────────────────────────── */
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* ─────────────────────────────────────────────
+   CHEVRON BOUNCE ANIMATION
+───────────────────────────────────────────── */
+@keyframes chevronBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+.chevron-bounce {
+  animation: chevronBounce 2s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────
+   CARD SHINE EFFECT
+───────────────────────────────────────────── */
+.plan-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.plan-card:hover::before {
+  animation: cardShine 0.7s ease forwards;
+}
+
+@keyframes cardShine {
+  0%   { left: -75%; }
+  100% { left: 125%; }
+}
+
+/* ─────────────────────────────────────────────
+   MAGNETIC BUTTON BASE
+   (JS handles the actual transform offset)
+───────────────────────────────────────────── */
+.btn-primary,
+.btn-secondary {
+  will-change: transform;
+}
