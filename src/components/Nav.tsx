@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 
-const navLinks = [
+const sectionLinks = [
   { label: 'Plans',        id: 'plans' },
   { label: 'How It Works', id: 'how-it-works' },
   { label: 'Stats',        id: 'stats' },
@@ -11,18 +12,18 @@ const navLinks = [
 export default function Nav() {
   const navRef = useRef<HTMLElement>(null)
   const isScrolled = useRef(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const nav = navRef.current
     if (!nav) return
 
-    // Animate nav in on load
     gsap.fromTo(nav,
       { y: -20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, delay: 0.3, ease: 'power3.out' }
     )
 
-    // Scroll background effect
     const handleScroll = () => {
       if (!nav) return
       if (window.scrollY > 50 && !isScrolled.current) {
@@ -44,9 +45,17 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Scroll to section — if not on home page, navigate there first
   const scrollTo = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
+    if (location.pathname !== '/') {
+      navigate('/')
+      // After navigation React will re-render; use setTimeout to let DOM settle
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      }, 150)
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return (
@@ -57,22 +66,31 @@ export default function Nav() {
     >
       <div className="max-w-[1400px] mx-auto px-8 md:px-12 h-[72px] flex items-center justify-between">
         {/* Wordmark */}
-        <div
-          className="font-sans font-extrabold text-white tracking-[4px] text-[18px] select-none"
+        <Link
+          to="/"
+          className="font-sans font-extrabold text-white tracking-[4px] text-[18px] select-none no-underline"
           style={{ letterSpacing: '4px' }}
         >
           VANTA
-        </div>
+        </Link>
 
         {/* Nav Links */}
         <ul className="hidden md:flex items-center gap-10">
-          {navLinks.map((link) => (
+          {sectionLinks.map((link) => (
             <li key={link.id}>
               <button onClick={() => scrollTo(link.id)} className="nav-link bg-transparent border-0 p-0">
                 {link.label}
               </button>
             </li>
           ))}
+          <li>
+            <Link
+              to="/analysis"
+              className="nav-link no-underline"
+            >
+              Analysis
+            </Link>
+          </li>
         </ul>
 
         {/* CTA */}

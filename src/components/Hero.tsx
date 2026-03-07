@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import Particles from '@tsparticles/react'
 import { initParticlesEngine } from '@tsparticles/react'
@@ -150,6 +151,12 @@ export default function Hero() {
           >
             See How It Works
           </button>
+          <Link
+            to="/analysis"
+            className="font-sans text-white/40 text-[11px] tracking-[2px] uppercase hover:text-white transition-colors duration-300 no-underline"
+          >
+            Explore Analysis →
+          </Link>
         </div>
       </div>
 
