@@ -16,21 +16,36 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [plan, setPlan] = useState<string>('free')
+
+  const fetchPlan = async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('plan')
+      .eq('id', userId)
+      .single()
+    if (data?.plan) setPlan(data.plan)
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null)
+      const u = data.session?.user ?? null
+      setUser(u)
+      if (u) fetchPlan(u.id)
       setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+      const u = session?.user ?? null
+      setUser(u)
+      if (u) fetchPlan(u.id)
+      else setPlan('free')
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
-  const isPro = ['pro', 'elite'].includes(user?.user_metadata?.plan ?? '')
+  const isPro = ['pro', 'elite'].includes(plan)
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -41,7 +56,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { plan: 'free' } },
+      options: {
+        data: { plan: 'free' },
+        emailRedirectTo: 'https://vanta-swart.vercel.app/login',
+      },
     })
     return { error: error?.message ?? null }
   }

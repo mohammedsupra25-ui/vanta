@@ -12,7 +12,7 @@ import Footer from '../components/Footer'
 import { useLenis } from '../hooks/useLenis'
 import { mockAnalyses } from '../lib/mockData'
 import { client, urlFor } from '../lib/sanityClient'
-import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabaseClient'
 import type { AnalysisPost, AnalysisStatus } from '../types/analysis'
 
 
@@ -161,37 +161,57 @@ function ScenarioBar({
 }
 
 // ─── Paywall overlay ──────────────────────────────────────────────────────────
-function PaywallOverlay() {
+function PaywallOverlay({ type }: { type: 'login' | 'upgrade' }) {
   return (
     <div
       className="absolute inset-0 flex flex-col items-center justify-center z-10"
       style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)' }}
     >
-      <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
-        Pro Access Required
-      </p>
-      <Link
-        to="/signup"
-        className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
-      >
-        Upgrade to Pro
-      </Link>
+      {type === 'login' ? (
+        <>
+          <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
+            Members Only
+          </p>
+          <Link
+            to="/login"
+            className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+          >
+            Login to View
+          </Link>
+        </>
+      ) : (
+        <>
+          <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
+            Pro Access Required
+          </p>
+          <Link
+            to="/signup"
+            className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+          >
+            Upgrade to Pro
+          </Link>
+        </>
+      )}
     </div>
   )
 }
 
 // ─── Chart image resolver ─────────────────────────────────────────────────────
-function AnalysisChart({ post, className = '', isPro = false }: { post: AnalysisPost; className?: string; isPro?: boolean }) {
+function AnalysisChart({ post, className = '', userPlan = null }: { post: AnalysisPost; className?: string; userPlan?: string | null }) {
+  const canView = userPlan === 'pro' || userPlan === 'elite'
+  const overlayType: 'login' | 'upgrade' = userPlan === null ? 'login' : 'upgrade'
+  const blurStyle = !canView ? { filter: 'blur(12px)' } : undefined
+
   let inner: React.ReactNode
   if (post.chart) {
     const imgUrl = urlFor(post.chart as Parameters<typeof urlFor>[0])?.width(1200).url()
     if (imgUrl) {
-      inner = <img src={imgUrl} alt={post.title} className={`w-full h-full object-cover ${className}`} style={!isPro ? { filter: 'blur(8px)' } : undefined} />
+      inner = <img src={imgUrl} alt={post.title} className={`w-full h-full object-cover ${className}`} style={blurStyle} />
     }
   }
   if (!inner) {
     inner = (
-      <div className={`w-full h-full bg-vanta-800 ${className}`} style={!isPro ? { filter: 'blur(8px)' } : undefined}>
+      <div className={`w-full h-full bg-vanta-800 ${className}`} style={blurStyle}>
         <ChartPlaceholder variant={post.chartSvg} />
       </div>
     )
@@ -199,13 +219,13 @@ function AnalysisChart({ post, className = '', isPro = false }: { post: Analysis
   return (
     <div className="relative w-full h-full">
       {inner}
-      {!isPro && <PaywallOverlay />}
+      {!canView && <PaywallOverlay type={overlayType} />}
     </div>
   )
 }
 
 // ─── Analysis grid card ───────────────────────────────────────────────────────
-function AnalysisCard({ post, isPro = false }: { post: AnalysisPost; isPro?: boolean }) {
+function AnalysisCard({ post, userPlan = null }: { post: AnalysisPost; userPlan?: string | null }) {
   const wc = post.waveCount ?? ''
   const preview = wc.slice(0, 110) + (wc.length > 110 ? '...' : '')
   const date = post.date
@@ -232,7 +252,7 @@ function AnalysisCard({ post, isPro = false }: { post: AnalysisPost; isPro?: boo
     >
       {/* Chart image */}
       <div className="relative" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-        <AnalysisChart post={post} isPro={isPro} />
+        <AnalysisChart post={post} userPlan={userPlan} />
         {/* Status overlay */}
         <div className="absolute top-3 left-3 z-20">
           <StatusBadge status={post.status} size="sm" />
@@ -287,8 +307,8 @@ const FILTERS: Array<AnalysisStatus | 'ALL'> = ['ALL', 'Active', 'Target Hit', '
 
 export default function Analysis() {
   useLenis()
-  const { isPro } = useAuth()
 
+  const [userPlan, setUserPlan] = useState<string | null>(null)
   const [engineInit, setEngineInit] = useState(false)
   const [analyses, setAnalyses] = useState<AnalysisPost[]>([])
   const [loading, setLoading] = useState(true)
@@ -300,6 +320,21 @@ export default function Analysis() {
   const featuredRef  = useRef<HTMLDivElement>(null)
   const gridRef      = useRef<HTMLDivElement>(null)
   const particlesContRef = useRef<HTMLDivElement>(null)
+
+  // Fetch user plan from profiles on every page load
+  useEffect(() => {
+    const fetchPlan = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { setUserPlan(null); return }
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('plan')
+        .eq('id', user.id)
+        .single()
+      setUserPlan(profile?.plan ?? 'free')
+    }
+    fetchPlan()
+  }, [])
 
   // Init particles engine
   useEffect(() => {
@@ -488,7 +523,7 @@ export default function Analysis() {
                 >
                   {/* Chart — 60% */}
                   <div className="relative lg:w-[60%] flex-shrink-0" style={{ minHeight: '340px' }}>
-                    <AnalysisChart post={featured} className="absolute inset-0" isPro={isPro} />
+                    <AnalysisChart post={featured} className="absolute inset-0" userPlan={userPlan} />
                     <div className="absolute top-5 left-5">
                       <StatusBadge status={featured.status} size="lg" />
                     </div>
@@ -624,7 +659,7 @@ export default function Analysis() {
                           show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
                         }}
                       >
-                        <AnalysisCard post={post} isPro={isPro} />
+                        <AnalysisCard post={post} userPlan={userPlan} />
                       </motion.div>
                     ))
                   )}
