@@ -3,10 +3,13 @@ import Cursor from './components/Cursor'
 import LandingPage from './pages/LandingPage'
 import Analysis from './pages/Analysis'
 import AnalysisDetail from './pages/AnalysisDetail'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <div className="grain-overlay" aria-hidden />
       <Cursor />
       <BrowserRouter>
@@ -14,9 +17,11 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/analysis/:slug" element={<AnalysisDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   )
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
+import { useAuth } from '../context/AuthContext'
 
 const sectionLinks = [
   { label: 'Plans',        id: 'plans' },
@@ -14,6 +15,7 @@ export default function Nav() {
   const isScrolled = useRef(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const nav = navRef.current
@@ -93,13 +95,37 @@ export default function Nav() {
           </li>
         </ul>
 
-        {/* CTA */}
-        <button
-          onClick={() => scrollTo('plans')}
-          className="hidden md:block font-sans font-bold text-white border border-white/40 px-7 py-3 text-[11px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white"
-        >
-          Get The Edge
-        </button>
+        {/* CTA / Auth */}
+        <div className="hidden md:flex items-center gap-3">
+          {user ? (
+            <>
+              <span className="font-sans text-white/30 text-[10px] tracking-[1px] truncate max-w-[160px]">
+                {user.email}
+              </span>
+              <button
+                onClick={() => logout()}
+                className="font-sans font-bold text-white/50 border border-white/20 px-5 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:text-white hover:border-white/50"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="font-sans font-bold text-white/60 text-[10px] tracking-[2px] uppercase transition-colors duration-200 hover:text-white no-underline px-4 py-2.5"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="font-sans font-bold text-white border border-white/40 px-6 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+              >
+                Get Access
+              </Link>
+            </>
+          )}
+        </div>
 
         {/* Mobile menu indicator */}
         <button className="md:hidden flex flex-col gap-[5px] p-2">

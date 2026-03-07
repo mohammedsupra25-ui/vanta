@@ -12,6 +12,7 @@ import Footer from '../components/Footer'
 import { useLenis } from '../hooks/useLenis'
 import { mockAnalyses } from '../lib/mockData'
 import { client, urlFor } from '../lib/sanityClient'
+import { useAuth } from '../context/AuthContext'
 import type { AnalysisPost, AnalysisStatus } from '../types/analysis'
 
 
@@ -159,23 +160,52 @@ function ScenarioBar({
   )
 }
 
+// ─── Paywall overlay ──────────────────────────────────────────────────────────
+function PaywallOverlay() {
+  return (
+    <div
+      className="absolute inset-0 flex flex-col items-center justify-center z-10"
+      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)' }}
+    >
+      <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
+        Pro Access Required
+      </p>
+      <Link
+        to="/signup"
+        className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+      >
+        Upgrade to Pro
+      </Link>
+    </div>
+  )
+}
+
 // ─── Chart image resolver ─────────────────────────────────────────────────────
-function AnalysisChart({ post, className = '' }: { post: AnalysisPost; className?: string }) {
+function AnalysisChart({ post, className = '', isPro = false }: { post: AnalysisPost; className?: string; isPro?: boolean }) {
+  let inner: React.ReactNode
   if (post.chart) {
     const imgUrl = urlFor(post.chart as Parameters<typeof urlFor>[0])?.width(1200).url()
     if (imgUrl) {
-      return <img src={imgUrl} alt={post.title} className={`w-full h-full object-cover ${className}`} />
+      inner = <img src={imgUrl} alt={post.title} className={`w-full h-full object-cover ${className}`} style={!isPro ? { filter: 'blur(8px)' } : undefined} />
     }
   }
+  if (!inner) {
+    inner = (
+      <div className={`w-full h-full bg-vanta-800 ${className}`} style={!isPro ? { filter: 'blur(8px)' } : undefined}>
+        <ChartPlaceholder variant={post.chartSvg} />
+      </div>
+    )
+  }
   return (
-    <div className={`w-full h-full bg-vanta-800 ${className}`}>
-      <ChartPlaceholder variant={post.chartSvg} />
+    <div className="relative w-full h-full">
+      {inner}
+      {!isPro && <PaywallOverlay />}
     </div>
   )
 }
 
 // ─── Analysis grid card ───────────────────────────────────────────────────────
-function AnalysisCard({ post }: { post: AnalysisPost }) {
+function AnalysisCard({ post, isPro = false }: { post: AnalysisPost; isPro?: boolean }) {
   const wc = post.waveCount ?? ''
   const preview = wc.slice(0, 110) + (wc.length > 110 ? '...' : '')
   const date = post.date
@@ -202,9 +232,9 @@ function AnalysisCard({ post }: { post: AnalysisPost }) {
     >
       {/* Chart image */}
       <div className="relative" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-        <AnalysisChart post={post} />
+        <AnalysisChart post={post} isPro={isPro} />
         {/* Status overlay */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 z-20">
           <StatusBadge status={post.status} size="sm" />
         </div>
         {post.result && (
@@ -257,6 +287,7 @@ const FILTERS: Array<AnalysisStatus | 'ALL'> = ['ALL', 'Active', 'Target Hit', '
 
 export default function Analysis() {
   useLenis()
+  const { isPro } = useAuth()
 
   const [engineInit, setEngineInit] = useState(false)
   const [analyses, setAnalyses] = useState<AnalysisPost[]>([])
@@ -457,7 +488,7 @@ export default function Analysis() {
                 >
                   {/* Chart — 60% */}
                   <div className="relative lg:w-[60%] flex-shrink-0" style={{ minHeight: '340px' }}>
-                    <AnalysisChart post={featured} className="absolute inset-0" />
+                    <AnalysisChart post={featured} className="absolute inset-0" isPro={isPro} />
                     <div className="absolute top-5 left-5">
                       <StatusBadge status={featured.status} size="lg" />
                     </div>
@@ -593,7 +624,7 @@ export default function Analysis() {
                           show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
                         }}
                       >
-                        <AnalysisCard post={post} />
+                        <AnalysisCard post={post} isPro={isPro} />
                       </motion.div>
                     ))
                   )}
