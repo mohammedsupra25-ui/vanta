@@ -23,12 +23,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  cursor: none;
   min-height: 100vh;
-}
-
-*, *::before, *::after {
-  cursor: none !important;
 }
 
 a {

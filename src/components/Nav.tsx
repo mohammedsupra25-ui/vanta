@@ -103,7 +103,7 @@ export default function Nav() {
                 {user.email}
               </span>
               <button
-                onClick={() => logout()}
+                onClick={async () => { await logout(); navigate('/') }}
                 className="font-sans font-bold text-white/50 border border-white/20 px-5 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:text-white hover:border-white/50"
               >
                 Logout

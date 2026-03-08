@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { mockAnalyses } from '../lib/mockData'
 import { client, urlFor } from '../lib/sanityClient'
+import { useUserPlan } from '../hooks/useUserPlan'
 import type { AnalysisPost, AnalysisStatus, AnalysisResult } from '../types/analysis'
 import { useLenis } from '../hooks/useLenis'
 
@@ -109,6 +110,7 @@ export default function AnalysisDetail() {
   const { slug } = useParams<{ slug: string }>()
   const [analysis, setAnalysis] = useState<AnalysisPost | null>(null)
   const [loading, setLoading] = useState(true)
+  const { user, isPro } = useUserPlan()
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -151,6 +153,9 @@ export default function AnalysisDetail() {
   const formattedDate = analysis?.date
     ? new Date(analysis.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     : ''
+
+  const canView = isPro
+  const overlayType: 'login' | 'upgrade' = !user ? 'login' : 'upgrade'
 
   // Resolve chart image URL or fall back to SVG
   const chartImageUrl = analysis?.chart ? urlFor(analysis.chart)?.width(1200).url() : null
@@ -200,13 +205,29 @@ export default function AnalysisDetail() {
           >
             <div className="max-w-[1400px] mx-auto px-8 md:px-12 py-16">
               <div
-                className="w-full rounded-none overflow-hidden"
+                className="w-full rounded-none overflow-hidden relative"
                 style={{ aspectRatio: '16 / 6', background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.07)' }}
               >
-                {chartImageUrl
-                  ? <img src={chartImageUrl} alt={analysis.title} className="w-full h-full object-cover" />
-                  : <ChartPlaceholder variant={analysis.chartSvg} />
-                }
+                <div className="w-full h-full" style={!canView ? { filter: 'blur(12px)' } : undefined}>
+                  {chartImageUrl
+                    ? <img src={chartImageUrl} alt={analysis.title} className="w-full h-full object-cover" />
+                    : <ChartPlaceholder variant={analysis.chartSvg} />
+                  }
+                </div>
+                {!canView && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center z-10"
+                    style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)' }}>
+                    <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
+                      {overlayType === 'login' ? 'Members Only' : 'Pro Access Required'}
+                    </p>
+                    <Link
+                      to={overlayType === 'login' ? '/login' : '/signup'}
+                      className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+                    >
+                      {overlayType === 'login' ? 'Login to View' : 'Upgrade to Pro'}
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -246,17 +267,34 @@ export default function AnalysisDetail() {
                   {analysis.waveCount && (
                   <div className="mb-14">
                     <span className="label-caps block mb-6">Wave Count</span>
-                    <p
-                      className="font-display text-white/80"
-                      style={{ fontSize: 'clamp(17px, 2vw, 21px)', lineHeight: 1.75 }}
-                    >
-                      {analysis.waveCount}
-                    </p>
+                    {canView ? (
+                      <p
+                        className="font-display text-white/80"
+                        style={{ fontSize: 'clamp(17px, 2vw, 21px)', lineHeight: 1.75 }}
+                      >
+                        {analysis.waveCount}
+                      </p>
+                    ) : (
+                      <div>
+                        <p
+                          className="font-display text-white/50 select-none"
+                          style={{ fontSize: 'clamp(17px, 2vw, 21px)', lineHeight: 1.75, filter: 'blur(6px)' }}
+                        >
+                          {analysis.waveCount}
+                        </p>
+                        <Link
+                          to={overlayType === 'login' ? '/login' : '/signup'}
+                          className="inline-block mt-4 font-sans font-bold text-white/50 border border-white/20 px-5 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:text-white hover:border-white/50 no-underline"
+                        >
+                          {overlayType === 'login' ? 'Login to Read' : 'Upgrade to Pro'}
+                        </Link>
+                      </div>
+                    )}
                   </div>
                   )}
 
-                  {/* Post-trade notes (if any) */}
-                  {analysis.postTradeNotes && (
+                  {/* Post-trade notes — pro only */}
+                  {canView && analysis.postTradeNotes && (
                     <div
                       className="p-8"
                       style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)' }}
@@ -269,12 +307,22 @@ export default function AnalysisDetail() {
                   )}
                 </div>
 
-                {/* Right: scenarios */}
+                {/* Right: scenarios — pro only */}
                 <div>
                   <span className="label-caps block mb-8">Scenarios</span>
-                  {(analysis.scenarios ?? []).map(s => (
+                  {canView ? (analysis.scenarios ?? []).map(s => (
                     <ScenarioBar key={s._key} label={s.label} probability={s.probability} description={s.description} />
-                  ))}
+                  )) : (
+                    <div className="py-8 border border-white/[0.06] text-center">
+                      <p className="font-sans text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Pro Content</p>
+                      <Link
+                        to={overlayType === 'login' ? '/login' : '/signup'}
+                        className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black no-underline"
+                      >
+                        {overlayType === 'login' ? 'Login to View' : 'Upgrade to Pro'}
+                      </Link>
+                    </div>
+                  )}
 
                   {/* Disclaimer */}
                   <p className="font-sans text-white/20 text-[11px] leading-relaxed mt-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '20px' }}>

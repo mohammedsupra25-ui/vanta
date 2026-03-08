@@ -12,7 +12,7 @@ import Footer from '../components/Footer'
 import { useLenis } from '../hooks/useLenis'
 import { mockAnalyses } from '../lib/mockData'
 import { client, urlFor } from '../lib/sanityClient'
-import { supabase } from '../lib/supabaseClient'
+import { useUserPlan } from '../hooks/useUserPlan'
 import type { AnalysisPost, AnalysisStatus } from '../types/analysis'
 
 
@@ -161,7 +161,7 @@ function ScenarioBar({
 }
 
 // ─── Paywall overlay ──────────────────────────────────────────────────────────
-function PaywallOverlay({ type }: { type: 'login' | 'upgrade' }) {
+function PaywallOverlay({ type, showLink = true }: { type: 'login' | 'upgrade'; showLink?: boolean }) {
   return (
     <div
       className="absolute inset-0 flex flex-col items-center justify-center z-10"
@@ -172,24 +172,28 @@ function PaywallOverlay({ type }: { type: 'login' | 'upgrade' }) {
           <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
             Members Only
           </p>
-          <Link
-            to="/login"
-            className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
-          >
-            Login to View
-          </Link>
+          {showLink && (
+            <Link
+              to="/login"
+              className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+            >
+              Login to View
+            </Link>
+          )}
         </>
       ) : (
         <>
           <p className="font-sans text-white/40 text-[9px] tracking-[3px] uppercase mb-3">
             Pro Access Required
           </p>
-          <Link
-            to="/signup"
-            className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
-          >
-            Upgrade to Pro
-          </Link>
+          {showLink && (
+            <Link
+              to="/plans"
+              className="font-sans font-bold text-white border border-white/40 px-6 py-3 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+            >
+              Upgrade to Pro
+            </Link>
+          )}
         </>
       )}
     </div>
@@ -197,10 +201,9 @@ function PaywallOverlay({ type }: { type: 'login' | 'upgrade' }) {
 }
 
 // ─── Chart image resolver ─────────────────────────────────────────────────────
-function AnalysisChart({ post, className = '', userPlan = null }: { post: AnalysisPost; className?: string; userPlan?: string | null }) {
-  const canView = userPlan === 'pro' || userPlan === 'elite'
-  const overlayType: 'login' | 'upgrade' = userPlan === null ? 'login' : 'upgrade'
-  const blurStyle = !canView ? { filter: 'blur(12px)' } : undefined
+function AnalysisChart({ post, className = '', isPro = false, isLoggedIn = false, showPaywallLink = true }: { post: AnalysisPost; className?: string; isPro?: boolean; isLoggedIn?: boolean; showPaywallLink?: boolean }) {
+  const overlayType: 'login' | 'upgrade' = !isLoggedIn ? 'login' : 'upgrade'
+  const blurStyle = !isPro ? { filter: 'blur(12px)' } : undefined
 
   let inner: React.ReactNode
   if (post.chart) {
@@ -219,22 +222,25 @@ function AnalysisChart({ post, className = '', userPlan = null }: { post: Analys
   return (
     <div className="relative w-full h-full">
       {inner}
-      {!canView && <PaywallOverlay type={overlayType} />}
+      {!isPro && <PaywallOverlay type={overlayType} showLink={showPaywallLink} />}
     </div>
   )
 }
 
 // ─── Analysis grid card ───────────────────────────────────────────────────────
-function AnalysisCard({ post, userPlan = null }: { post: AnalysisPost; userPlan?: string | null }) {
+function AnalysisCard({ post, isPro = false, isLoggedIn = false }: { post: AnalysisPost; isPro?: boolean; isLoggedIn?: boolean }) {
+  const canView = isPro
   const wc = post.waveCount ?? ''
   const preview = wc.slice(0, 110) + (wc.length > 110 ? '...' : '')
   const date = post.date
     ? new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : '—'
 
+  const cardTo = isPro ? `/analysis/${post.slug}` : isLoggedIn ? '/plans' : '/login'
+
   return (
     <Link
-      to={`/analysis/${post.slug}`}
+      to={cardTo}
       className="block group"
       style={{
         background: '#0d0d0d',
@@ -252,7 +258,7 @@ function AnalysisCard({ post, userPlan = null }: { post: AnalysisPost; userPlan?
     >
       {/* Chart image */}
       <div className="relative" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-        <AnalysisChart post={post} userPlan={userPlan} />
+        <AnalysisChart post={post} isPro={isPro} isLoggedIn={isLoggedIn} showPaywallLink={false} />
         {/* Status overlay */}
         <div className="absolute top-3 left-3 z-20">
           <StatusBadge status={post.status} size="sm" />
@@ -275,12 +281,18 @@ function AnalysisCard({ post, userPlan = null }: { post: AnalysisPost; userPlan?
           {post.title}
         </h3>
 
-        <p className="font-sans text-vanta-400 mb-4 leading-relaxed" style={{ fontSize: '13px' }}>
-          {preview}
-        </p>
+        {canView ? (
+          <p className="font-sans text-vanta-400 mb-4 leading-relaxed" style={{ fontSize: '13px' }}>
+            {preview}
+          </p>
+        ) : (
+          <p className="font-sans text-vanta-600 mb-4 leading-relaxed select-none" style={{ fontSize: '13px', filter: 'blur(4px)' }}>
+            {preview || 'Wave count analysis and trade thesis available to pro members only.'}
+          </p>
+        )}
 
-        {/* Scenarios row */}
-        {(post.scenarios?.length ?? 0) > 0 && (
+        {/* Scenarios row — pro only */}
+        {canView && (post.scenarios?.length ?? 0) > 0 && (
           <div className="flex flex-wrap gap-3 mb-5">
             {post.scenarios.map(s => (
               <span key={s._key} className="font-sans font-bold text-vanta-600" style={{ fontSize: '10px', letterSpacing: '1.5px' }}>
@@ -308,7 +320,8 @@ const FILTERS: Array<AnalysisStatus | 'ALL'> = ['ALL', 'Active', 'Target Hit', '
 export default function Analysis() {
   useLenis()
 
-  const [userPlan, setUserPlan] = useState<string | null>(null)
+  const { user, isPro } = useUserPlan()
+  const isLoggedIn = !!user
   const [engineInit, setEngineInit] = useState(false)
   const [analyses, setAnalyses] = useState<AnalysisPost[]>([])
   const [loading, setLoading] = useState(true)
@@ -320,21 +333,6 @@ export default function Analysis() {
   const featuredRef  = useRef<HTMLDivElement>(null)
   const gridRef      = useRef<HTMLDivElement>(null)
   const particlesContRef = useRef<HTMLDivElement>(null)
-
-  // Fetch user plan from profiles on every page load
-  useEffect(() => {
-    const fetchPlan = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setUserPlan(null); return }
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan')
-        .eq('id', user.id)
-        .single()
-      setUserPlan(profile?.plan ?? 'free')
-    }
-    fetchPlan()
-  }, [])
 
   // Init particles engine
   useEffect(() => {
@@ -376,16 +374,16 @@ export default function Analysis() {
   useEffect(() => {
     if (featuredRef.current) {
       gsap.fromTo(featuredRef.current,
-        { opacity: 0, y: 50, scale: 0.98 },
+        { opacity: 0, y: 30, scale: 0.98 },
         { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: featuredRef.current, start: 'top 80%', toggleActions: 'play none none reverse' } }
+          scrollTrigger: { trigger: featuredRef.current, start: 'top 100%', once: true } }
       )
     }
     if (gridRef.current) {
       gsap.fromTo(gridRef.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: gridRef.current, start: 'top 85%', toggleActions: 'play none none reverse' } }
+          scrollTrigger: { trigger: gridRef.current, start: 'top 100%', once: true } }
       )
     }
   }, [analyses])
@@ -511,19 +509,18 @@ export default function Analysis() {
         {(!loading && featured) ? (
           <section className="section-padding" style={{ background: '#000000' }}>
             <div className="max-w-[1400px] mx-auto px-8 md:px-12">
-              <div ref={featuredRef} className="opacity-0">
+              <div ref={featuredRef} style={{ opacity: 0 }}>
                 <span className="label-caps block mb-8">Latest Analysis</span>
                 <div
                   className="flex flex-col lg:flex-row"
                   style={{
                     background: '#0d0d0d',
                     border: '1px solid rgba(255,255,255,0.08)',
-                    minHeight: '520px',
                   }}
                 >
                   {/* Chart — 60% */}
-                  <div className="relative lg:w-[60%] flex-shrink-0" style={{ minHeight: '340px' }}>
-                    <AnalysisChart post={featured} className="absolute inset-0" userPlan={userPlan} />
+                  <div className="relative lg:w-[60%] flex-shrink-0" style={{ minHeight: '240px' }}>
+                    <AnalysisChart post={featured} className="absolute inset-0" isPro={isPro} isLoggedIn={isLoggedIn} />
                     <div className="absolute top-5 left-5">
                       <StatusBadge status={featured.status} size="lg" />
                     </div>
@@ -552,14 +549,20 @@ export default function Analysis() {
                       {featured.waveCount && (
                       <div className="mb-8">
                         <div className="label-caps mb-3">Wave Count</div>
-                        <p className="font-sans text-vanta-200 leading-relaxed" style={{ fontSize: '14px' }}>
-                          {featured.waveCount}
-                        </p>
+                        {isPro ? (
+                          <p className="font-sans text-vanta-200 leading-relaxed" style={{ fontSize: '14px' }}>
+                            {featured.waveCount}
+                          </p>
+                        ) : (
+                          <p className="font-sans text-vanta-400 leading-relaxed select-none" style={{ fontSize: '14px', filter: 'blur(5px)' }}>
+                            {featured.waveCount}
+                          </p>
+                        )}
                       </div>
                       )}
 
-                      {/* Scenarios */}
-                      {(featured.scenarios?.length ?? 0) > 0 && (
+                      {/* Scenarios — pro only */}
+                      {isPro && (featured.scenarios?.length ?? 0) > 0 && (
                       <div className="mb-6">
                         <div className="label-caps mb-5">Scenarios</div>
                         {featured.scenarios.map((s, i) => (
@@ -631,7 +634,7 @@ export default function Analysis() {
             </div>
 
             {/* Grid */}
-            <div ref={gridRef} className="opacity-0">
+            <div ref={gridRef} style={{ opacity: 0 }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={filter}
@@ -659,7 +662,7 @@ export default function Analysis() {
                           show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
                         }}
                       >
-                        <AnalysisCard post={post} userPlan={userPlan} />
+                        <AnalysisCard post={post} isPro={isPro} isLoggedIn={isLoggedIn} />
                       </motion.div>
                     ))
                   )}
