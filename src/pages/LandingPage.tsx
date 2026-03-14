@@ -1,7 +1,6 @@
 import { useLenis } from '../hooks/useLenis'
 import { useMagneticButtons } from '../hooks/useMagneticButtons'
 import { useSpotlightEffect } from '../hooks/useSpotlightEffect'
-import CustomCursor from '../components/CustomCursor'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import TrustBar from '../components/TrustBar'
@@ -20,7 +19,6 @@ export default function LandingPage() {
 
   return (
     <>
-      <CustomCursor />
       <Nav />
       <main>
         <Hero />
