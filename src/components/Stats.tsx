@@ -83,14 +83,14 @@ export default function Stats() {
           <span className="label-caps">By the Numbers</span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
+        <div className="bento-grid">
           {stats.map((s, i) => (
-            <div key={i} className="stat-card opacity-0">
-              <div className="mb-6" style={{ width: '40px', height: '1px', background: 'rgba(255,255,255,0.25)' }} />
-              <div className="stat-number text-white mb-3">
+            <div key={i} className="bento-card spotlight-card col-span-12 md:col-span-3 opacity-0 stat-card group">
+              <div className="mb-8" style={{ width: '40px', height: '2px', background: 'rgba(255,255,255,0.15)', transition: 'background 0.3s ease' }} />
+              <div className="mini-stat-label">{s.label}</div>
+              <div className="mini-stat-value mt-auto">
                 <span ref={el => { numRefs.current[i] = el }}>{s.final}</span>
               </div>
-              <div className="label-caps">{s.label}</div>
             </div>
           ))}
         </div>

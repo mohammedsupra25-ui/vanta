@@ -52,14 +52,14 @@ export default function Plans() {
         {/* Single centered Pro card */}
         <div className="flex justify-center">
           <div ref={cardRef} className="w-full max-w-[480px] opacity-0">
-            <div className="plan-card featured relative flex flex-col h-full p-10">
-              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-white text-[9px] tracking-[2px] uppercase px-3 py-1.5">
+            <div className="bento-card spotlight-card featured relative flex flex-col h-full p-10">
+              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-white text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10">
                 Pro
               </div>
 
-              <div className="label-caps mb-4">Vanta Pro</div>
+              <div className="label-caps mb-4 z-10">Vanta Pro</div>
 
-              <div className="flex items-end gap-1 mb-2">
+              <div className="flex items-end gap-1 mb-2 z-10">
                 <span
                   className="font-display font-semibold text-white"
                   style={{ fontSize: 'clamp(36px, 4vw, 52px)', lineHeight: 1 }}
@@ -69,13 +69,13 @@ export default function Plans() {
                 <span className="font-sans text-vanta-400 text-sm mb-1">/mo</span>
               </div>
 
-              <p className="font-sans text-vanta-400 text-[13px] mb-8 mt-2 leading-relaxed">
+              <p className="font-sans text-vanta-400 text-[13px] mb-8 mt-2 leading-relaxed z-10">
                 Full access to every analysis — wave counts, trade scenarios, entry & exit levels, and post-trade notes.
               </p>
 
-              <div className="border-t border-white/[0.06] mb-8" />
+              <div className="border-t border-white/[0.06] mb-8 z-10" />
 
-              <ul className="flex flex-col flex-1 mb-10">
+              <ul className="flex flex-col flex-1 mb-10 z-10">
                 {proFeatures.map((f, i) => (
                   <li
                     key={i}
@@ -88,7 +88,7 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border bg-white text-black border-white hover:bg-transparent hover:text-white transition-all duration-300">
+              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border bg-white text-black border-white hover:bg-transparent hover:text-white transition-all duration-300 z-10">
                 Subscribe Now
               </button>
             </div>

@@ -71,31 +71,21 @@ export default function HowItWorks() {
           </h2>
         </div>
 
-        <div className="relative">
-          <div
-            ref={lineRef}
-            className="hidden md:block absolute top-8 left-[calc(16.66%+20px)] right-[calc(16.66%+20px)]"
-            style={{ height: '1px', background: 'rgba(255,255,255,0.08)', zIndex: 0 }}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-            {steps.map((step, i) => (
-              <div key={i} ref={el => { stepsRef.current[i] = el }} className="relative opacity-0">
+        <div className="bento-grid">
+          {steps.map((step, i) => (
+            <div key={i} ref={el => { stepsRef.current[i] = el }} className="bento-card spotlight-card col-span-12 md:col-span-4 opacity-0 relative group">
+              <div className="flex flex-col h-full z-10">
                 <div
-                  className="font-display font-light text-vanta-700 select-none mb-6"
-                  style={{ fontSize: 'clamp(64px, 8vw, 96px)', lineHeight: 1, letterSpacing: '-0.02em' }}
+                  className="font-display font-light text-vanta-700 select-none mb-6 transition-colors duration-300 group-hover:text-white"
+                  style={{ fontSize: 'clamp(48px, 6vw, 72px)', lineHeight: 1, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.1)' }}
                 >
                   {step.num}
                 </div>
-                <div
-                  className="hidden md:block absolute"
-                  style={{ top: '26px', left: '-2px', width: '12px', height: '12px', borderRadius: '50%', background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.25)', zIndex: 1 }}
-                />
-                <h3 className="font-sans font-bold text-white mb-4" style={{ fontSize: '18px' }}>{step.title}</h3>
+                <h3 className="font-sans font-bold text-white mb-3 mt-auto" style={{ fontSize: '18px' }}>{step.title}</h3>
                 <p className="font-sans text-vanta-400 leading-relaxed" style={{ fontSize: '14px' }}>{step.desc}</p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
