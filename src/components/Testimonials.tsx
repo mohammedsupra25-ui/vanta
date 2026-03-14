@@ -51,7 +51,7 @@ export default function Testimonials() {
       )
     }
 
-    const cards = sectionRef.current?.querySelectorAll('.testimonial-card')
+    const cards = sectionRef.current?.querySelectorAll('.glassmorphism-card')
     if (cards) {
       gsap.fromTo(cards,
         { opacity: 0, x: 40 },

@@ -109,46 +109,49 @@ export default function Hero() {
       </div>
 
       {/* Floating Signals */}
-      <FloatingSignal
-        asset="BTC/USD"
-        signalType="LONG"
-        entry="64,230.50"
-        target="67,500.00"
-        profit="+5.1%"
-        delay={0.2}
-        duration={7}
-        position={{ top: '15%', left: '10%' }}
-      />
-      <FloatingSignal
-        asset="ETH/USD"
-        signalType="SHORT"
-        entry="3,450.25"
-        target="3,120.00"
-        profit="+9.6%"
-        delay={1.5}
-        duration={8}
-        position={{ top: '25%', right: '12%' }}
-      />
-      <FloatingSignal
-        asset="SOL/USD"
-        signalType="LONG"
-        entry="145.80"
-        target="162.50"
-        profit="+11.4%"
-        delay={0.8}
-        duration={6}
-        position={{ bottom: '20%', left: '15%' }}
-      />
-      <FloatingSignal
-        asset="XAU/USD"
-        signalType="LONG"
-        entry="2,340.10"
-        target="2,385.00"
-        profit="+1.9%"
-        delay={2.1}
-        duration={9}
-        position={{ bottom: '25%', right: '15%' }}
-      />
+      {/* Pushed further out to the edges and hidden on screens smaller than large (1024px) to prevent overlap */}
+      <div className="hidden lg:block">
+        <FloatingSignal
+          asset="USTEC"
+          signalType="LONG"
+          entry="18,230.50"
+          target="18,500.00"
+          profit="+1.5%"
+          delay={0.2}
+          duration={7}
+          position={{ top: '15%', left: '3%' }}
+        />
+        <FloatingSignal
+          asset="EURUSD"
+          signalType="SHORT"
+          entry="1.0850"
+          target="1.0720"
+          profit="+1.2%"
+          delay={1.5}
+          duration={8}
+          position={{ top: '25%', right: '3%' }}
+        />
+        <FloatingSignal
+          asset="US30"
+          signalType="LONG"
+          entry="38,145.80"
+          target="38,562.50"
+          profit="+1.1%"
+          delay={0.8}
+          duration={6}
+          position={{ bottom: '20%', left: '4%' }}
+        />
+        <FloatingSignal
+          asset="XAUUSD"
+          signalType="LONG"
+          entry="2,340.10"
+          target="2,385.00"
+          profit="+1.9%"
+          delay={2.1}
+          duration={9}
+          position={{ bottom: '25%', right: '4%' }}
+        />
+      </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-6" style={{ marginTop: '-40px' }}>
         <div ref={labelRef} className="label-caps mb-10 opacity-0 relative">

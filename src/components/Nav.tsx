@@ -86,11 +86,13 @@ export default function Nav() {
             </li>
           ))}
           <li>
-            <Link
-              to="/analysis"
-              className="nav-link no-underline"
-            >
+            <Link to="/analysis" className="nav-link no-underline">
               Analysis
+            </Link>
+          </li>
+          <li>
+            <Link to="/education" className="nav-link no-underline">
+              Education
             </Link>
           </li>
         </ul>
