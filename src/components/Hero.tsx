@@ -6,6 +6,7 @@ import { initParticlesEngine } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 import type { Engine } from '@tsparticles/engine'
 import { ChevronDown } from 'lucide-react'
+import FloatingSignal from './FloatingSignal'
 
 const particlesOptions = {
   background: { color: { value: 'transparent' } },
@@ -101,14 +102,58 @@ export default function Hero() {
       style={{ background: '#000000' }}
     >
       <div ref={particlesRef} className="absolute inset-0 opacity-0" style={{ zIndex: 0 }}>
+        <div className="ambient-glow"></div>
         {engineInit && (
           <Particles id="tsparticles" particlesLoaded={particlesLoaded} options={particlesOptions} />
         )}
       </div>
 
+      {/* Floating Signals */}
+      <FloatingSignal
+        asset="BTC/USD"
+        signalType="LONG"
+        entry="64,230.50"
+        target="67,500.00"
+        profit="+5.1%"
+        delay={0.2}
+        duration={7}
+        position={{ top: '15%', left: '10%' }}
+      />
+      <FloatingSignal
+        asset="ETH/USD"
+        signalType="SHORT"
+        entry="3,450.25"
+        target="3,120.00"
+        profit="+9.6%"
+        delay={1.5}
+        duration={8}
+        position={{ top: '25%', right: '12%' }}
+      />
+      <FloatingSignal
+        asset="SOL/USD"
+        signalType="LONG"
+        entry="145.80"
+        target="162.50"
+        profit="+11.4%"
+        delay={0.8}
+        duration={6}
+        position={{ bottom: '20%', left: '15%' }}
+      />
+      <FloatingSignal
+        asset="XAU/USD"
+        signalType="LONG"
+        entry="2,340.10"
+        target="2,385.00"
+        profit="+1.9%"
+        delay={2.1}
+        duration={9}
+        position={{ bottom: '25%', right: '15%' }}
+      />
+
       <div className="relative z-10 flex flex-col items-center text-center px-6" style={{ marginTop: '-40px' }}>
-        <div ref={labelRef} className="label-caps mb-10 opacity-0">
-          Precision Market Analysis
+        <div ref={labelRef} className="label-caps mb-10 opacity-0 relative">
+          <span className="absolute -inset-2 bg-luxury-gold/10 blur-xl rounded-full z-0"></span>
+          <span className="relative z-10 text-luxury-gold">Precision Market Analysis</span>
         </div>
 
         <div className="flex flex-col items-center">
@@ -138,15 +183,16 @@ export default function Hero() {
           Institutional-grade market analysis. Delivered before the move. Built for traders who demand an edge.
         </p>
 
-        <div ref={ctaRef} className="mt-12 flex flex-col sm:flex-row items-center gap-4 opacity-0">
+        <div ref={ctaRef} className="mt-12 flex flex-col sm:flex-row items-center gap-4 opacity-0 relative z-20">
           <button
-            className="btn-primary"
+            className="btn-primary flex items-center gap-2 group hover:bg-luxury-gold hover:text-black hover:border-luxury-gold transition-all duration-300"
             onClick={() => document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Get The Edge
+            <ChevronDown size={14} className="group-hover:translate-y-1 transition-transform" style={{ transform: 'rotate(-90deg)' }}/>
           </button>
           <button
-            className="btn-secondary"
+            className="btn-secondary group hover:border-luxury-gold/50 hover:text-luxury-gold transition-all duration-300"
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
           >
             See How It Works

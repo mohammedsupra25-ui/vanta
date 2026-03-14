@@ -73,10 +73,10 @@ export default function HowItWorks() {
 
         <div className="bento-grid">
           {steps.map((step, i) => (
-            <div key={i} ref={el => { stepsRef.current[i] = el }} className="bento-card spotlight-card col-span-12 md:col-span-4 opacity-0 relative group">
+            <div key={i} ref={el => { stepsRef.current[i] = el }} className="glassmorphism-card col-span-12 md:col-span-4 opacity-0 relative group p-8">
               <div className="flex flex-col h-full z-10">
                 <div
-                  className="font-display font-light text-vanta-700 select-none mb-6 transition-colors duration-300 group-hover:text-white"
+                  className="font-display font-light text-vanta-700 select-none mb-6 transition-colors duration-500 group-hover:text-luxury-gold"
                   style={{ fontSize: 'clamp(48px, 6vw, 72px)', lineHeight: 1, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.1)' }}
                 >
                   {step.num}

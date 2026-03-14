@@ -104,7 +104,7 @@ export default function Nav() {
               </span>
               <button
                 onClick={async () => { await logout(); navigate('/') }}
-                className="font-sans font-bold text-white/50 border border-white/20 px-5 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:text-white hover:border-white/50"
+                className="font-sans font-bold text-white/50 border border-white/20 px-5 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:text-luxury-gold hover:border-luxury-gold"
               >
                 Logout
               </button>
@@ -113,13 +113,13 @@ export default function Nav() {
             <>
               <Link
                 to="/login"
-                className="font-sans font-bold text-white/60 text-[10px] tracking-[2px] uppercase transition-colors duration-200 hover:text-white no-underline px-4 py-2.5"
+                className="font-sans font-bold text-white/60 text-[10px] tracking-[2px] uppercase transition-colors duration-200 hover:text-luxury-gold no-underline px-4 py-2.5"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="font-sans font-bold text-white border border-white/40 px-6 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+                className="font-sans font-bold text-luxury-gold border border-luxury-gold/40 px-6 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-luxury-gold hover:text-black hover:border-luxury-gold no-underline shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]"
               >
                 Get Access
               </Link>

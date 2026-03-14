@@ -52,12 +52,15 @@ export default function Plans() {
         {/* Single centered Pro card */}
         <div className="flex justify-center">
           <div ref={cardRef} className="w-full max-w-[480px] opacity-0">
-            <div className="bento-card spotlight-card featured relative flex flex-col h-full p-10">
-              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-white text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10">
+            <div className="glassmorphism-card relative flex flex-col h-full p-10 group overflow-hidden">
+              {/* Ambient inner glow on hover */}
+              <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+              
+              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-luxury-gold text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">
                 Pro
               </div>
 
-              <div className="label-caps mb-4 z-10">Vanta Pro</div>
+              <div className="label-caps mb-4 z-10 text-luxury-gold font-bold">Vanta Pro</div>
 
               <div className="flex items-end gap-1 mb-2 z-10">
                 <span
@@ -79,16 +82,16 @@ export default function Plans() {
                 {proFeatures.map((f, i) => (
                   <li
                     key={i}
-                    className="flex items-center justify-between py-3.5"
+                    className="flex items-center justify-between py-3.5 group-hover:border-luxury-gold/20 transition-colors duration-300"
                     style={{ borderBottom: i < proFeatures.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
                   >
                     <span className="font-sans text-vanta-400 text-[13px]">{f.label}</span>
-                    <span className="font-sans font-semibold text-white text-[13px]">{f.value}</span>
+                    <span className="font-sans font-semibold text-white/90 text-[13px]">{f.value}</span>
                   </li>
                 ))}
               </ul>
 
-              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border bg-white text-black border-white hover:bg-transparent hover:text-white transition-all duration-300 z-10">
+              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border border-luxury-gold bg-luxury-gold text-black shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:bg-transparent hover:text-luxury-gold transition-all duration-300 z-10 rounded-sm">
                 Subscribe Now
               </button>
             </div>

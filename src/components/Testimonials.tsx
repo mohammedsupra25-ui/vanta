@@ -90,12 +90,12 @@ export default function Testimonials() {
         </div>
       </div>
 
-      <div ref={trackRef} className="no-scrollbar flex gap-5 overflow-x-auto px-8 md:px-12 pb-4" style={{ cursor: 'grab' }}>
+      <div ref={trackRef} className="no-scrollbar flex gap-5 overflow-x-auto px-8 md:px-12 pb-4 pt-10" style={{ cursor: 'grab' }}>
         {testimonials.map((t, i) => (
-          <div key={i} className="testimonial-card p-8 flex flex-col justify-between opacity-0">
+          <div key={i} className="glassmorphism-card min-w-[360px] p-8 flex flex-col justify-between opacity-0 group hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500">
             <div className="flex items-center gap-1 mb-6">
               {Array.from({ length: 5 }).map((_, j) => (
-                <div key={j} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#ffffff' }} />
+                <div key={j} className="w-1.5 h-1.5 rounded-full bg-luxury-gold shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
               ))}
             </div>
 
