@@ -9,7 +9,7 @@ import Footer from '../components/Footer'
 import { neowaveModules as initialModules } from '../lib/chapterData'
 import { getEducationModules, type SanityEducationModule } from '../lib/education'
 import { urlFor } from '../lib/sanityClient'
-import { ZoneMyth, FailureCycle, TwelveWeekJourney, MonowaveAtom, CandleVsLine, NeutralityRule, FractalZoom, MovementTypes, WaveDegrees, DegreeMismatch, ContextMeaning, AnalysisOrder, FoundationSummary } from '../components/EducationInteractives'
+import { ZoneMyth, FailureCycle, TwelveWeekJourney, MonowaveAtom, CandleVsLine, NeutralityRule, FractalZoom, MovementTypes, WaveDegrees, DegreeMismatch, ContextMeaning, AnalysisOrder, FoundationSummary, FiveOrThree, PatternInsidePattern, DegreeComparison, M0M1M2System, MarketCycle, WavePersonalitiesTour, WavePersonalitiesCards, ImpulsiveCorrectiveToggle, ZoomIntoWave, FullInternalStructure, FoundationSummaryDefinitive } from '../components/EducationInteractives'
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Foundation: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
@@ -138,6 +138,19 @@ const ptComponents = {
         case 'context-meaning': return <ContextMeaning />
         case 'analysis-order': return <AnalysisOrder />
         case 'foundation-summary': return <FoundationSummary />
+        case 'five-or-three': return <FiveOrThree />
+        case 'pattern-inside-pattern': return <PatternInsidePattern />
+        case 'degree-comparison': return <DegreeComparison />
+        case 'm0-m1-m2-system': return <M0M1M2System />
+        case 'market-cycle': return <MarketCycle />
+        case 'market-cycle-rich': return <MarketCycle rich />
+        case 'wave-personalities-tour': return <WavePersonalitiesTour />
+        case 'wave-personalities-cards': return <WavePersonalitiesCards />
+        case 'impulsive-corrective-toggle': return <ImpulsiveCorrectiveToggle />
+        case 'zoom-wave-3': return <ZoomIntoWave waveType="impulsive" />
+        case 'zoom-wave-2': return <ZoomIntoWave waveType="corrective" />
+        case 'full-internal-structure': return <FullInternalStructure />
+        case 'foundation-summary-definitive': return <FoundationSummaryDefinitive />
         default: return null
       }
     },
