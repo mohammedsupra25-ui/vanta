@@ -463,3 +463,75 @@ a {
   animation: ambientPulse 15s ease-in-out infinite alternate;
 }
 
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY: PROSE LUXURY
+───────────────────────────────────────────── */
+.prose-luxury {
+  --tw-prose-body: #cccccc;
+  --tw-prose-headings: #ffffff;
+  --tw-prose-lead: #888888;
+  --tw-prose-links: #D4AF37;
+  --tw-prose-bold: #ffffff;
+  --tw-prose-counters: #888888;
+  --tw-prose-bullets: #D4AF37;
+  --tw-prose-hr: rgba(255, 255, 255, 0.1);
+  --tw-prose-quotes: #D4AF37;
+  --tw-prose-quote-borders: #D4AF37;
+  --tw-prose-captions: #888888;
+  --tw-prose-code: #ffffff;
+  --tw-prose-pre-code: #cccccc;
+  --tw-prose-pre-bg: #0a0a0a;
+  --tw-prose-th-borders: rgba(255, 255, 255, 0.1);
+  --tw-prose-td-borders: rgba(255, 255, 255, 0.05);
+}
+
+.prose-luxury p {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #cccccc;
+  margin-bottom: 2.25rem;
+}
+
+.prose-luxury h1, 
+.prose-luxury h2, 
+.prose-luxury h3, 
+.prose-luxury h4 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-top: 4.5rem;
+  margin-bottom: 1.75rem;
+  color: #ffffff;
+}
+
+.prose-luxury strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.prose-luxury em {
+  color: #D4AF37;
+  font-style: italic;
+}
+
+.prose-luxury blockquote {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-style: italic;
+  font-size: 1.75rem;
+  line-height: 1.4;
+  border-left: 2px solid #D4AF37;
+  padding-left: 2.5rem;
+  margin: 4rem 0;
+  color: #D4AF37;
+}
+
+.prose-luxury .mono-label {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.6);
+}
+
