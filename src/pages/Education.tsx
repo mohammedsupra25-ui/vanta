@@ -9,7 +9,7 @@ import Footer from '../components/Footer'
 import { neowaveModules as initialModules } from '../lib/chapterData'
 import { getEducationModules, type SanityEducationModule } from '../lib/education'
 import { urlFor } from '../lib/sanityClient'
-import { ZoneMyth, FailureCycle, TwelveWeekJourney } from '../components/EducationInteractives'
+import { ZoneMyth, FailureCycle, TwelveWeekJourney, MonowaveAtom, CandleVsLine, NeutralityRule, FractalZoom, MovementTypes, WaveDegrees, DegreeMismatch, ContextMeaning, AnalysisOrder, FoundationSummary } from '../components/EducationInteractives'
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Foundation: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
@@ -64,47 +64,56 @@ const ptComponents = {
         </div>
       )
     },
-    comparison: ({ value }: any) => (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-16">
-        <div className="glassmorphism-card p-10 border-red-500/10 bg-red-500/2 transition-all hover:bg-red-500/5 group">
-          <span className="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 font-sans text-[10px] font-bold uppercase tracking-widest mb-6">
-            PREDICTION
-          </span>
-          <h4 className="font-display text-xl text-white mb-6 group-hover:text-red-200 transition-colors">
-            {value.left?.title}
-          </h4>
-          <ul className="space-y-3">
-            {value.left?.bullets?.map((b: string, i: number) => (
-              <li key={i} className="flex items-start gap-3 font-sans text-sm text-vanta-400 leading-relaxed">
-                <span className="text-red-500 opacity-50">•</span>
-                {b}
-              </li>
-            ))}
-          </ul>
+    comparison: ({ value }: any) => {
+      const isGoldLeft = value.left?.tag?.toLowerCase().includes('gold') || value.left?.tag?.toLowerCase().includes('vanta') || value.left?.tag?.toLowerCase().includes('evidence')
+      const isGoldRight = value.right?.tag?.toLowerCase().includes('gold') || value.right?.tag?.toLowerCase().includes('vanta') || value.right?.tag?.toLowerCase().includes('evidence')
+      
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-16">
+          {/* Left Card */}
+          <div className={`p-8 glassmorphism-card transition-all relative overflow-hidden group ${
+            isGoldLeft ? 'border-luxury-gold/20 bg-luxury-gold/2' : 'border-white/10 bg-white/2'
+          }`}>
+            <div className={`absolute top-0 left-0 w-1 h-full ${isGoldLeft ? 'bg-luxury-gold' : 'bg-vanta-600'}`} />
+            <h4 className={`font-sans text-[10px] uppercase tracking-[3px] mb-6 ${isGoldLeft ? 'text-luxury-gold' : 'text-vanta-400'}`}>
+              {value.left?.tag || 'Retail / Prediction'}
+            </h4>
+            <h5 className="font-display text-xl text-white mb-6 leading-tight">{value.left?.title}</h5>
+            <ul className="space-y-3">
+              {value.left?.bullets?.map((b: string, i: number) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className={`${isGoldLeft ? 'text-luxury-gold/40' : 'text-vanta-600/40'} text-xs translate-y-1`}>→</span>
+                  <span className="font-sans text-xs text-vanta-400 leading-relaxed">{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Right Card */}
+          <div className={`p-8 glassmorphism-card transition-all relative overflow-hidden group ${
+            isGoldRight ? 'border-luxury-gold/20 bg-luxury-gold/2' : 'border-white/10 bg-white/2'
+          }`}>
+            <div className={`absolute top-0 left-0 w-1 h-full ${isGoldRight ? 'bg-luxury-gold' : 'bg-vanta-600'}`} />
+            <h4 className={`font-sans text-[10px] uppercase tracking-[3px] mb-6 ${isGoldRight ? 'text-luxury-gold' : 'text-vanta-400'}`}>
+              {value.right?.tag || 'Evidence / VANTA'}
+            </h4>
+            <h5 className="font-display text-xl text-white mb-6 leading-tight">{value.right?.title}</h5>
+            <ul className="space-y-3">
+              {value.right?.bullets?.map((b: string, i: number) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className={`${isGoldRight ? 'text-luxury-gold/40' : 'text-vanta-600/40'} text-xs translate-y-1`}>→</span>
+                  <span className="font-sans text-xs text-vanta-400 leading-relaxed">{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div className="glassmorphism-card p-10 border-emerald-500/10 bg-emerald-500/2 transition-all hover:bg-emerald-500/5 group">
-          <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-sans text-[10px] font-bold uppercase tracking-widest mb-6">
-            EVIDENCE
-          </span>
-          <h4 className="font-display text-xl text-white mb-6 group-hover:text-emerald-200 transition-colors">
-            {value.right?.title}
-          </h4>
-          <ul className="space-y-3">
-            {value.right?.bullets?.map((b: string, i: number) => (
-              <li key={i} className="flex items-start gap-3 font-sans text-sm text-vanta-200 leading-relaxed">
-                <span className="text-emerald-500">•</span>
-                {b}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    ),
+      )
+    },
     steps: ({ value }: any) => (
       <div className="my-16 border-y border-white/5 py-4">
         {value.items?.map((step: string, i: number) => (
           <div key={i} className="flex gap-8 py-8 border-b last:border-0 border-white/5 items-center group">
-            <span className="font-sans text-xs font-bold text-red-500/70 tracking-tighter group-hover:text-red-500 transition-colors">
+            <span className="font-sans text-xs font-bold text-luxury-gold/70 tracking-tighter group-hover:text-luxury-gold transition-colors">
               {String(i + 1).padStart(2, '0')}
             </span>
             <p className="font-sans text-lg text-vanta-200 leading-snug group-hover:text-white transition-colors">
@@ -119,20 +128,33 @@ const ptComponents = {
         case 'zone-myth': return <ZoneMyth />
         case 'failure-cycle': return <FailureCycle />
         case 'journey': return <TwelveWeekJourney />
+        case 'monowave-atom': return <MonowaveAtom />
+        case 'candle-line': return <CandleVsLine />
+        case 'neutrality-rule': return <NeutralityRule />
+        case 'fractal-zoom': return <FractalZoom />
+        case 'movement-types': return <MovementTypes />
+        case 'wave-degrees': return <WaveDegrees />
+        case 'degree-mismatch': return <DegreeMismatch />
+        case 'context-meaning': return <ContextMeaning />
+        case 'analysis-order': return <AnalysisOrder />
+        case 'foundation-summary': return <FoundationSummary />
         default: return null
       }
     },
     learningList: ({ value }: any) => {
       const isWill = value.type === 'will'
+      const bgColor = isWill ? 'bg-luxury-gold/5' : 'bg-white/5'
+      const textColor = isWill ? 'text-luxury-gold' : 'text-vanta-400'
+      
       return (
-        <div className={`my-12 p-10 glassmorphism-card border-white/5 ${isWill ? 'bg-emerald-500/5' : 'bg-red-500/5'}`}>
-          <span className={`block font-sans text-[10px] uppercase tracking-[3px] mb-6 ${isWill ? 'text-emerald-400' : 'text-red-400'}`}>
+        <div className={`my-12 p-10 glassmorphism-card border-white/5 ${bgColor}`}>
+          <span className={`block font-sans text-[10px] uppercase tracking-[3px] mb-6 ${textColor}`}>
             {value.title || (isWill ? "WHAT YOU'LL LEARN" : "WHAT YOU WON'T LEARN")}
           </span>
           <ul className="space-y-4">
             {value.items?.map((item: string, i: number) => (
               <li key={i} className="flex gap-4 items-start group">
-                <span className={isWill ? 'text-emerald-500' : 'text-red-500'}>
+                <span className={textColor}>
                   {isWill ? '→' : '→'}
                 </span>
                 <p className="font-sans text-lg text-vanta-200 leading-relaxed group-hover:text-white transition-colors">
@@ -371,7 +393,7 @@ export default function Education() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                   >
                     <div className="font-sans text-[10px] uppercase tracking-[5px] text-luxury-gold/60 mb-6">
-                      NEoWave Masterclass — Module 01
+                      {activeModule.phase || 'NEoWave Masterclass'} — Module {String(activeModule.moduleNumber || 0).padStart(2, '0')}
                     </div>
                     <h1 className="hero-headline text-white mb-8">
                       {activeModule.title}
