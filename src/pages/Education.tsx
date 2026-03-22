@@ -10,6 +10,16 @@ import { neowaveModules as initialModules } from '../lib/chapterData'
 import { getEducationModules, type SanityEducationModule } from '../lib/education'
 import { urlFor } from '../lib/sanityClient'
 import { ZoneMyth, FailureCycle, TwelveWeekJourney, MonowaveAtom, CandleVsLine, NeutralityRule, FractalZoom, MovementTypes, WaveDegrees, DegreeMismatch, ContextMeaning, AnalysisOrder, FoundationSummary, FiveOrThree, PatternInsidePattern, DegreeComparison, M0M1M2System, MarketCycle, WavePersonalitiesTour, WavePersonalitiesCards, ImpulsiveCorrectiveToggle, ZoomIntoWave, FullInternalStructure, FoundationSummaryDefinitive } from '../components/EducationInteractives'
+import { CleanItUp, OneThirdTest, BigAndSub, FindTheWaves } from '../components/interactives/Module03'
+import { SevenRules, SpotTheViolation, ExtensionTest, AlternationCheck, ThreeChannelTypes } from '../components/interactives/Module04'
+import { TheZigzag, TheFlat, TheTriangle, ComplexBuilder } from '../components/interactives/Module05'
+import { TrendingVsTerminal, SpotTheImpostor, PowerRatingScale } from '../components/interactives/Module06'
+import { ImpulseConfirmation, LimitingVsNonLimiting } from '../components/interactives/Module07'
+import { BigVsSubSeparation } from '../components/interactives/Module08'
+import { TheTimeframeFunnel, StopPlacement } from '../components/interactives/Module09'
+import { TheScenarioMatrix } from '../components/interactives/Module10'
+import { GoodVsBadAI } from '../components/interactives/Module11'
+import { CompletionCelebration } from '../components/interactives/Module12'
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Foundation: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
@@ -151,6 +161,54 @@ const ptComponents = {
         case 'zoom-wave-2': return <ZoomIntoWave waveType="corrective" />
         case 'full-internal-structure': return <FullInternalStructure />
         case 'foundation-summary-definitive': return <FoundationSummaryDefinitive />
+        
+        // Module 3
+        case 'figure-3-1': return <CleanItUp />
+        case 'figure-3-2': return <OneThirdTest />
+        case 'figure-3-3': return <BigAndSub />
+        case 'figure-3-4': return <FindTheWaves />
+        
+        // Module 4
+        case 'figure-4-1': return <SevenRules />
+        case 'figure-4-2': return <SpotTheViolation />
+        case 'figure-4-3': return <ExtensionTest />
+        case 'figure-4-4': return <AlternationCheck />
+        case 'figure-4-5': return <ThreeChannelTypes />
+        
+        // Module 5
+        case 'figure-5-1': return <TheZigzag />
+        case 'figure-5-2': return <TheFlat />
+        case 'figure-5-3': return <TheTriangle />
+        case 'figure-5-4': return <ComplexBuilder />
+        
+        // Module 6
+        case 'figure-6-1': return <TrendingVsTerminal />
+        case 'figure-6-2': return <SpotTheImpostor />
+        case 'figure-6-3': return <PowerRatingScale />
+        
+        // Module 7
+        case 'figure-7-1': return <ImpulseConfirmation />
+        case 'figure-7-2': return <LimitingVsNonLimiting />
+        
+        // Module 8
+        case 'figure-8-1':
+        case 'figure-08-1': return <BigVsSubSeparation />
+        
+        // Module 9
+        case 'figure-9-1':
+        case 'figure-09-1': return <TheTimeframeFunnel />
+        case 'figure-9-2':
+        case 'figure-09-2': return <StopPlacement />
+        
+        // Module 10
+        case 'figure-10-1': return <TheScenarioMatrix />
+        
+        // Module 11
+        case 'figure-11-1': return <GoodVsBadAI />
+        
+        // Module 12
+        case 'figure-12-1': return <CompletionCelebration />
+        
         default: return null
       }
     },
