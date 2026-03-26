@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // --- COMPONENT 10.1: THE SCENARIO MATRIX ---
 export function TheScenarioMatrix() {

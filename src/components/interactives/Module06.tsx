@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // --- COMPONENT 6.1: TRENDING VS TERMINAL ---
 export function TrendingVsTerminal() {
@@ -133,7 +133,7 @@ export function SpotTheImpostor() {
   ];
 
   const handleReveal = (id: number) => {
-    if (!revealed.includes(id)) setRevealed(prev => [...prev, id]);
+    if (!revealed.includes(id)) setRevealed((prev: number[]) => [...prev, id]);
   };
 
   return (

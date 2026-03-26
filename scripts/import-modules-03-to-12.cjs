@@ -57,6 +57,7 @@ for (const rawMod of rawModules) {
   const introPart = sectionsRaw.shift(); // remove the stuff before Section 01
   
   let sections = [];
+  let usedInteractiveIds = new Set();
   
   // if sections weren't split properly by '## SECTION', we can try another split
   for (let i = 0; i < sectionsRaw.length; i++) {
@@ -99,11 +100,14 @@ for (const rawMod of rawModules) {
                contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
                currentParagraph = [];
            }
-           const typeMatch = line.match(/FIGURE \d+\.\d+ — "(.*?)"/);
-           // create a safe type from the label or just generic
-           const genericType = 'figure-' + order + '-' + interactiveIdx++;
-           contentBlocks.push({ _type: 'interactive', type: genericType });
-           continue;
+            const idMatch = line.match(/FIGURE (\d+)\.(\d+)/);
+            // create a safe type from the label or just generic
+            const genericType = idMatch ? `figure-${idMatch[1]}-${idMatch[2]}` : `figure-${order}-${interactiveIdx++}`;
+            if (!usedInteractiveIds.has(genericType)) {
+                contentBlocks.push({ _type: 'interactive', type: genericType });
+                usedInteractiveIds.add(genericType);
+            }
+            continue;
        }
        
        if (line.startsWith('**[CALLOUT') || line.startsWith('> **') || line.startsWith('> *')) {

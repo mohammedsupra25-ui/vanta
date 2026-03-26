@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // --- COMPONENT 9.1: THE TIMEFRAME FUNNEL ---
 export function TheTimeframeFunnel() {
