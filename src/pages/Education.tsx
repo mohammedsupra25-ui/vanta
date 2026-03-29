@@ -11,8 +11,8 @@ import { getEducationModules, type SanityEducationModule } from '../lib/educatio
 import { urlFor } from '../lib/sanityClient'
 import { ZoneMyth, FailureCycle, TwelveWeekJourney, MonowaveAtom, CandleVsLine, NeutralityRule, FractalZoom, MovementTypes, WaveDegrees, DegreeMismatch, ContextMeaning, AnalysisOrder, FoundationSummary, FiveOrThree, PatternInsidePattern, DegreeComparison, M0M1M2System, MarketCycle, WavePersonalitiesTour, WavePersonalitiesCards, ImpulsiveCorrectiveToggle, ZoomIntoWave, FullInternalStructure, FoundationSummaryDefinitive } from '../components/EducationInteractives'
 import {
-
   CycleExplainer,
+  FractalZoom as FractalZoomV2,
   RuleViolations,
   OverlapStory,
   FiboTool,
@@ -173,7 +173,7 @@ const ptComponents = {
         case 'foundation-summary-definitive': return <FoundationSummaryDefinitive />
         
         case 'v2-CycleExplainer': return <CycleExplainer />
-        case 'v2-FractalZoom': return <FractalZoom />
+        case 'v2-FractalZoom': return <FractalZoomV2 />
         case 'v2-RuleViolations': return <RuleViolations />
         case 'v2-OverlapStory': return <OverlapStory />
         case 'v2-FiboTool': return <FiboTool />
