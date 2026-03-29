@@ -13,18 +13,33 @@ const client = createClient({
 const content = fs.readFileSync('/Users/supra/Downloads/VANTA_MODULES_3_TO_12_FIX.md', 'utf8');
 
 // ─── FIGURE PLACEMENT MAP ───────────────────────────────────────────
-// Maps: moduleOrder → sectionIndex (0-based) → array of old figure IDs to append
-const figureMapping = {
-  3:  { 3: ['figure-3-3'], 4: ['figure-3-4'] },
-  4:  { 1: ['figure-4-1', 'figure-4-2', 'figure-4-3'], 2: ['figure-4-4'] },
-  5:  { 0: ['figure-8-1'] },
-  6:  { 0: ['figure-5-1', 'figure-5-2', 'figure-5-3'], 2: ['figure-5-4'] },
-  7:  { 0: ['figure-7-1'], 2: ['figure-4-5', 'figure-7-2'] },
-  8:  { 0: ['figure-9-1'], 1: ['figure-9-2'] },
-  9:  { 1: ['figure-3-2'] },
-  10: { 1: ['figure-10-1'] },
-  11: {},
-  12: { 1: ['figure-11-1'] },
+// Placements at the exact end of specific sections
+const sectionEndMapping = {
+  4:  { 1: ['v2-RuleViolations'], 3: ['v2-FiboTool'] },
+  5:  { 2: ['v2-AnalysisFlow'] }, // Section 3 "What Did Sub Do" (index 2)
+  6:  { 0: ['v2-ShapeExplainer'], 1: ['v2-MutationExplainer', 'v2-ComplexCorrections'] },
+  7:  { 0: ['v2-ZeroBTrendline', 'v2-ConfirmationExplainer'], 2: ['v2-ExtensionTypes'] },
+  8:  { 1: ['v2-EntryTypes'] },
+  9:  { 2: ['v2-DontGetTrapped'] }, // Section 3 "Degree Problem 2" (index 2)
+  10: { 2: ['v2-ProtocolWalkthrough'] },
+  12: { 1: ['v2-AICommunication'] },
+};
+
+// Placements immediately after a specific paragraph line
+const midSectionSnippets = {
+  3: {
+    "That's the heartbeat. That's what every market does. Over and over and over.": "v2-CycleExplainer",
+    "It's waves inside waves inside waves. All the way down.": "v2-FractalZoom"
+  },
+  4: {
+    "Something else is happening.": "v2-OverlapStory"
+  },
+  9: {
+    "NOT wave 4. This is tiny. It's probably just the correction of the subwaves inside wave 3.": "v2-DegreeTest"
+  },
+  11: {
+    "A tight stop on a correct analysis guarantees you get shaken out by noise. A structural stop on a correct analysis lets the trade work.": "v2-StopShowdown"
+  }
 };
 
 // ─── FORMATTING LABELS TO STRIP ─────────────────────────────────────
@@ -161,24 +176,35 @@ for (const rawMod of rawModules) {
     let currentParagraph = [];
     let insideDesignSpec = false; // true while inside an INTERACTIVE FIGURE spec block
 
+    const pushParagraph = () => {
+      if (!currentParagraph.length) return;
+      const text = currentParagraph.join(' ');
+      contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text }] });
+      currentParagraph = [];
+      
+      const snippets = midSectionSnippets[order];
+      if (snippets) {
+        for (const [snippetText, compId] of Object.entries(snippets)) {
+          if (text.includes(snippetText)) {
+            contentBlocks.push({ _type: 'interactive', type: compId });
+            break;
+          }
+        }
+      }
+    };
+
     for (let li = 1; li < cLines.length; li++) {
       const line = cLines[li].trim();
 
       // Skip empty lines (flush current paragraph)
       if (!line) {
-        if (currentParagraph.length) {
-          contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-          currentParagraph = [];
-        }
+        pushParagraph();
         continue;
       }
 
       // --- separator
       if (line === '---') {
-        if (currentParagraph.length) {
-          contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-          currentParagraph = [];
-        }
+        pushParagraph();
         if (insideDesignSpec) insideDesignSpec = false;
         continue;
       }
@@ -191,20 +217,14 @@ for (const rawMod of rawModules) {
 
       // ── DESIGN SPEC: INTERACTIVE FIGURE → enter skip mode ──
       if (line.startsWith('**[DESIGN SPEC: INTERACTIVE FIGURE')) {
-        if (currentParagraph.length) {
-          contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-          currentParagraph = [];
-        }
+        pushParagraph();
         insideDesignSpec = true;
         continue;
       }
 
       // ── DESIGN SPEC: CALLOUT BLOCK label → skip just this line ──
       if (line.startsWith('**[DESIGN SPEC: CALLOUT BLOCK')) {
-        if (currentParagraph.length) {
-          contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-          currentParagraph = [];
-        }
+        pushParagraph();
         continue;
       }
 
@@ -213,10 +233,7 @@ for (const rawMod of rawModules) {
 
       // ── Callout text (> lines) ──
       if (line.startsWith('>')) {
-        if (currentParagraph.length) {
-          contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-          currentParagraph = [];
-        }
+        pushParagraph();
         let calloutText = line.replace(/^>\s*/, '').replace(/\*\*/g, '').trim();
         let nextIdx = li + 1;
         while (nextIdx < cLines.length && cLines[nextIdx].trim().startsWith('>')) {
@@ -237,18 +254,18 @@ for (const rawMod of rawModules) {
     }
 
     // Flush remaining paragraph
-    if (currentParagraph.length) {
-      contentBlocks.push({ _type: 'block', children: [{ _type: 'span', text: currentParagraph.join(' ') }] });
-    }
+    pushParagraph();
 
     // ── Inject mapped interactive figures at end of this section ──
-    const moduleFigs = figureMapping[order] || {};
-    const sectionFigs = moduleFigs[si] || [];
-    for (const figId of sectionFigs) {
-      contentBlocks.push({ _type: 'interactive', type: figId });
-    }
-
-    if (contentBlocks.length > 0) {
+    const moduleFigs = sectionEndMapping[order] || {};
+    if (moduleFigs[si]) {
+      moduleFigs[si].forEach(figId => {
+        contentBlocks.push({
+          _type: 'interactive',
+          type: figId,
+        });
+      });
+    }if (contentBlocks.length > 0) {
       sections.push({ label, heading, content: contentBlocks });
     }
   }
