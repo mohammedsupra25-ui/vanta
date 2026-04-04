@@ -89,11 +89,11 @@ function ScenarioBar({ label, probability, description }: { label: string; proba
     <div className="mb-8">
       <div className="flex items-baseline justify-between mb-3">
         <span className="font-sans font-bold text-white text-[12px] tracking-[1.5px] uppercase">{label}</span>
-        <span className="font-display italic text-white/50 text-[22px]">{probability}%</span>
+        <span className="font-display italic text-luxury-gold/80 text-[22px]">{probability}%</span>
       </div>
-      <div className="h-px bg-white/10 mb-4 relative overflow-hidden">
+      <div className="h-px bg-luxury-gold/20 mb-4 relative overflow-hidden">
         <motion.div
-          className="absolute left-0 top-0 h-full bg-white"
+          className="absolute left-0 top-0 h-full bg-luxury-gold shadow-[0_0_10px_rgba(212,175,55,0.5)]"
           initial={{ width: 0 }}
           whileInView={{ width: `${probability}%` }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
@@ -296,11 +296,17 @@ export default function AnalysisDetail() {
                   {/* Post-trade notes — pro only */}
                   {canView && analysis.postTradeNotes && (
                     <div
-                      className="p-8"
-                      style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)' }}
+                      className="p-8 glassmorphism-card spotlight-card rounded-2xl relative overflow-hidden group"
+                      onMouseMove={e => {
+                        const rect = e.currentTarget.getBoundingClientRect()
+                        e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+                        e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+                      }}
+                      style={{ border: '1px solid rgba(212,175,55,0.15)' }}
                     >
-                      <span className="label-caps block mb-5">Post-Trade Notes</span>
-                      <p className="font-sans text-white/60 text-[14px] leading-relaxed">
+                      <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl z-0"></div>
+                      <span className="label-caps block mb-5 relative z-10 text-luxury-gold/80">Post-Trade Notes</span>
+                      <p className="font-sans text-white/60 text-[14px] leading-relaxed relative z-10">
                         {analysis.postTradeNotes}
                       </p>
                     </div>
@@ -344,9 +350,10 @@ export default function AnalysisDetail() {
 
                 <Link
                   to="/#plans"
-                  className="font-sans font-bold text-white border border-white/40 px-7 py-3 text-[11px] tracking-[2px] uppercase transition-all duration-300 hover:bg-white hover:text-black hover:border-white no-underline"
+                  className="bg-luxury-gold text-black font-sans font-bold text-[11px] tracking-[3px] uppercase px-7 py-3 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all relative group overflow-hidden no-underline rounded-sm"
                 >
-                  Get The Edge
+                  <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%)] translate-x-[-150%] animate-shimmer group-hover:animate-none"></span>
+                  <span className="relative z-10">Get The Edge</span>
                 </Link>
               </div>
             </div>

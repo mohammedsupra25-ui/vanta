@@ -23,10 +23,10 @@ const particlesOpts = {
   background: { color: { value: 'transparent' } },
   particles: {
     number: { value: 60 },
-    color: { value: '#ffffff' },
-    opacity: { value: 0.2, random: { enable: true, minimumValue: 0.05 } },
-    size: { value: { min: 0.2, max: 1.2 } },
-    links: { enable: true, distance: 110, color: '#ffffff', opacity: 0.05, width: 0.4 },
+    color: { value: '#D4AF37' },
+    opacity: { value: 0.3, random: { enable: true, minimumValue: 0.1 } },
+    size: { value: { min: 0.4, max: 1.5 } },
+    links: { enable: true, distance: 110, color: '#D4AF37', opacity: 0.15, width: 0.5 },
     move: { enable: true, speed: 0.4, random: true, outModes: { default: 'out' as const } },
   },
   interactivity: {
@@ -241,23 +241,16 @@ function AnalysisCard({ post, isPro = false, isLoggedIn = false }: { post: Analy
   return (
     <Link
       to={cardTo}
-      className="block group"
-      style={{
-        background: '#0d0d0d',
-        border: '1px solid rgba(255,255,255,0.06)',
-        transition: 'border-color 0.35s ease, transform 0.35s ease',
-      }}
-      onMouseEnter={e => {
-        ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'
-        ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'
-      }}
-      onMouseLeave={e => {
-        ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'
-        ;(e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
+      className="block group glassmorphism-card spotlight-card rounded-2xl overflow-hidden relative border border-white/5 hover:border-luxury-gold/50 transition-all duration-500"
+      onMouseMove={e => {
+        const rect = e.currentTarget.getBoundingClientRect()
+        e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+        e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
       }}
     >
+      <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl z-0"></div>
       {/* Chart image */}
-      <div className="relative" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
+      <div className="relative z-10" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
         <AnalysisChart post={post} isPro={isPro} isLoggedIn={isLoggedIn} showPaywallLink={false} />
         {/* Status overlay */}
         <div className="absolute top-3 left-3 z-20">
@@ -438,12 +431,13 @@ export default function Analysis() {
           </div>
 
           <div className="relative z-10 flex flex-col items-center text-center px-6 py-20">
-            <div ref={heroLabelRef} className="label-caps mb-6 opacity-0">
-              XAUUSD · NEoWave Analysis
+            <div ref={heroLabelRef} className="label-caps mb-6 opacity-0 relative">
+              <span className="absolute -inset-2 bg-luxury-gold/10 blur-xl rounded-full z-0"></span>
+              <span className="relative z-10 text-luxury-gold">XAUUSD · NEoWave Analysis</span>
             </div>
             <h1
               ref={heroTitleRef}
-              className="font-display italic text-white opacity-0"
+              className="font-display italic text-white opacity-0 drop-shadow-lg"
               style={{ fontWeight: 300, fontSize: 'clamp(56px, 8vw, 96px)', lineHeight: 1, letterSpacing: '-0.02em' }}
             >
               Market Analysis
@@ -512,14 +506,19 @@ export default function Analysis() {
               <div ref={featuredRef} style={{ opacity: 0 }}>
                 <span className="label-caps block mb-8">Latest Analysis</span>
                 <div
-                  className="flex flex-col lg:flex-row"
+                  className="flex flex-col lg:flex-row glassmorphism-card spotlight-card rounded-2xl overflow-hidden group"
+                  onMouseMove={e => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+                    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+                  }}
                   style={{
-                    background: '#0d0d0d',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(212,175,55,0.15)',
                   }}
                 >
+                  <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl z-0"></div>
                   {/* Chart — 60% */}
-                  <div className="relative lg:w-[60%] flex-shrink-0" style={{ minHeight: '240px' }}>
+                  <div className="relative z-10 lg:w-[60%] flex-shrink-0" style={{ minHeight: '240px' }}>
                     <AnalysisChart post={featured} className="absolute inset-0" isPro={isPro} isLoggedIn={isLoggedIn} />
                     <div className="absolute top-5 left-5">
                       <StatusBadge status={featured.status} size="lg" />
@@ -695,13 +694,13 @@ export default function Analysis() {
                   { label: 'Analyses',        value: `${total} Documented` },
                 ].map((item, j) => (
                   <span key={j} className="flex items-center shrink-0">
-                    <span className="font-sans font-bold text-vanta-400 uppercase tracking-[3px] text-[10px]">
-                      {item.label}:
+                    <span className="font-sans font-medium text-vanta-400 uppercase tracking-[4px] text-[10px]">
+                      {item.label}
                     </span>
-                    <span className="font-sans font-bold text-white uppercase tracking-[3px] text-[10px] ml-2">
+                    <span className="font-sans font-bold text-luxury-gold uppercase tracking-[2px] text-[11px] ml-3" style={{ textShadow: '0 0 10px rgba(212,175,55,0.4)' }}>
                       {item.value}
                     </span>
-                    <span className="mx-8 text-vanta-700">·</span>
+                    <span className="mx-12 text-luxury-gold/40 text-[8px]">◆</span>
                   </span>
                 ))}
               </span>

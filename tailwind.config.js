@@ -26,6 +26,8 @@ export default {
         'float-slow': 'float 8s ease-in-out infinite',
         'float-fast': 'float 5s ease-in-out infinite',
         'ambient-pulse': 'ambientPulse 15s ease-in-out infinite alternate',
+        'shimmer': 'shimmer 2.5s ease-in-out infinite',
+        'border-flow': 'borderFlow 4s linear infinite',
       },
       keyframes: {
         ticker: {
@@ -43,6 +45,15 @@ export default {
         ambientPulse: {
           '0%': { opacity: '0.3', transform: 'scale(1)' },
           '100%': { opacity: '0.6', transform: 'scale(1.1)' },
+        },
+        shimmer: {
+          '0%': { opacity: '0.5' },
+          '50%': { opacity: '1', filter: 'drop-shadow(0 0 10px rgba(212,175,55,0.6))' },
+          '100%': { opacity: '0.5' },
+        },
+        borderFlow: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '200% 50%' },
         },
       },
     },

@@ -39,6 +39,41 @@ export default function Plans() {
     }
   }, [])
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    cardRef.current.style.setProperty('--mouse-x', `${x}px`)
+    cardRef.current.style.setProperty('--mouse-y', `${y}px`)
+
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotateX = ((y - centerY) / centerY) * -10
+    const rotateY = ((x - centerX) / centerX) * 10
+
+    gsap.to(cardRef.current, {
+      rotateX,
+      rotateY,
+      transformPerspective: 1000,
+      ease: 'power3.out',
+      duration: 0.5,
+      overwrite: 'auto'
+    })
+  }
+
+  const handleMouseLeave = () => {
+    if (!cardRef.current) return
+    gsap.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      ease: 'power3.out',
+      duration: 1,
+      overwrite: 'auto'
+    })
+  }
+
   return (
     <section ref={sectionRef} id="plans" className="section-padding" style={{ background: '#000000' }}>
       <div className="max-w-[1400px] mx-auto px-8 md:px-12">
@@ -49,14 +84,13 @@ export default function Plans() {
           </h2>
         </div>
 
-        {/* Single centered Pro card */}
         <div className="flex justify-center">
-          <div ref={cardRef} className="w-full max-w-[480px] opacity-0">
-            <div className="glassmorphism-card relative flex flex-col h-full p-10 group overflow-hidden">
+          <div ref={cardRef} className="w-full max-w-[480px] opacity-0" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+            <div className="glassmorphism-card spotlight-card relative flex flex-col h-full p-10 group overflow-hidden border border-white/5 hover:border-luxury-gold/50 transition-colors duration-500 rounded-2xl">
               {/* Ambient inner glow on hover */}
               <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
               
-              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-luxury-gold text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">
+              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-[linear-gradient(135deg,#F3E5AB,#D4AF37)] text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">
                 Pro
               </div>
 
@@ -91,7 +125,8 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border border-luxury-gold bg-luxury-gold text-black shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:bg-transparent hover:text-luxury-gold transition-all duration-300 z-10 rounded-sm">
+              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border border-luxury-gold bg-transparent text-luxury-gold hover:bg-luxury-gold hover:text-black shadow-[0_0_15px_rgba(212,175,55,0.1)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 z-10 rounded-sm relative overflow-hidden group/btn">
+                <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%)] translate-x-[-150%] group-hover/btn:animate-shimmer"></span>
                 Subscribe Now
               </button>
             </div>

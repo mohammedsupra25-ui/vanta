@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install)"
+      "Bash(npm install)",
+      "Bash(xargs -I{} cat /Users/supra/.claude/plugins/marketplaces/claude-plugins-official/plugins/{}/skill.json)",
+      "Bash(cat /Users/supra/.claude/plugins/marketplaces/claude-plugins-official/plugins/example-plugin/skills/*.md)",
+      "Bash(cat /Users/supra/.claude/plugins/marketplaces/claude-plugins-official/plugins/frontend-design/skills/*.md)",
+      "Bash(cat /Users/supra/.claude/plugins/marketplaces/claude-plugins-official/plugins/example-plugin/skills/example-skill/*)",
+      "Bash(mkdir -p /Users/supra/.claude/plugins/marketplaces/ui-ux-pro-max-skill/plugins/ui-ux-pro-max/.claude-plugin)",
+      "Bash(mkdir -p /Users/supra/.claude/plugins/marketplaces/ui-ux-pro-max-skill/plugins/ui-ux-pro-max/skills/ui-ux-pro-max)"
     ]
   }
 }

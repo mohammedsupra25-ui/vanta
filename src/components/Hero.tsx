@@ -12,18 +12,18 @@ const particlesOptions = {
   background: { color: { value: 'transparent' } },
   particles: {
     number: { value: 120, density: { enable: true } },
-    color: { value: '#ffffff' },
+    color: { value: '#D4AF37' },
     opacity: {
-      value: 0.35,
-      random: { enable: true, minimumValue: 0.1 },
+      value: 0.45,
+      random: { enable: true, minimumValue: 0.15 },
     },
-    size: { value: { min: 0.3, max: 1.4 } },
+    size: { value: { min: 0.5, max: 1.8 } },
     links: {
       enable: true,
-      distance: 130,
-      color: '#ffffff',
-      opacity: 0.07,
-      width: 0.5,
+      distance: 120,
+      color: '#D4AF37',
+      opacity: 0.15,
+      width: 0.7,
     },
     move: {
       enable: true,
@@ -76,11 +76,11 @@ export default function Hero() {
     }
     if (line1Ref.current) {
       tl.fromTo(line1Ref.current.querySelectorAll('.clip-reveal-inner'),
-        { y: '110%' }, { y: '0%', duration: 1, ease: 'power4.out', stagger: 0.08 }, 0.65)
+        { y: '110%', rotationX: -20, opacity: 0 }, { y: '0%', rotationX: 0, opacity: 1, duration: 1.2, ease: 'power4.out', stagger: 0.1 }, 0.65)
     }
     if (line2Ref.current) {
       tl.fromTo(line2Ref.current.querySelectorAll('.clip-reveal-inner'),
-        { y: '110%' }, { y: '0%', duration: 1, ease: 'power4.out', stagger: 0.08 }, 0.75)
+        { y: '110%', rotationX: -20, opacity: 0 }, { y: '0%', rotationX: 0, opacity: 1, duration: 1.2, ease: 'power4.out', stagger: 0.1 }, 0.75)
     }
     if (subRef.current) {
       tl.fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.2)
@@ -188,14 +188,17 @@ export default function Hero() {
 
         <div ref={ctaRef} className="mt-12 flex flex-col sm:flex-row items-center gap-4 opacity-0 relative z-20">
           <button
-            className="btn-primary flex items-center gap-2 group hover:bg-luxury-gold hover:text-black hover:border-luxury-gold transition-all duration-300"
+            className="btn-primary flex items-center gap-2 group transition-all duration-300 relative overflow-hidden"
             onClick={() => document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Get The Edge
-            <ChevronDown size={14} className="group-hover:translate-y-1 transition-transform" style={{ transform: 'rotate(-90deg)' }}/>
+            <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] translate-x-[-150%] animate-shimmer group-hover:animate-none"></span>
+            <span className="relative z-10 flex items-center gap-2">
+              Get The Edge
+              <ChevronDown size={14} className="group-hover:translate-x-1 group-hover:text-black transition-transform" style={{ transform: 'rotate(-90deg)' }}/>
+            </span>
           </button>
           <button
-            className="btn-secondary group hover:border-luxury-gold/50 hover:text-luxury-gold transition-all duration-300"
+            className="btn-secondary group transition-all duration-300"
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
           >
             See How It Works

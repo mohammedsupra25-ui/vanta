@@ -329,10 +329,15 @@ export default function Education() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.5 }}
                   onClick={() => setActiveModule(mod)}
-                  className={`group text-left glassmorphism-card p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/20 ${DIFFICULTY_GLOW[mod.difficulty]}`}
+                  onMouseMove={e => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+                    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+                  }}
+                  className={`group text-left glassmorphism-card spotlight-card p-7 flex flex-col justify-between transition-all duration-300 hover:border-luxury-gold/30 ${DIFFICULTY_GLOW[mod.difficulty]} rounded-2xl overflow-hidden relative`}
                 >
-                  {/* Top row */}
-                  <div className="flex items-start justify-between mb-8">
+                  <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl z-0"></div>
+                  <div className="flex items-start justify-between mb-8 relative z-10">
                     <span className={`font-sans text-[10px] font-bold uppercase tracking-[2px] px-2 py-1 rounded-full border ${DIFFICULTY_COLORS[mod.difficulty]}`}>
                       {mod.difficulty}
                     </span>
@@ -342,15 +347,14 @@ export default function Education() {
                     </div>
                   </div>
 
-                  {/* Module number + title */}
-                  <div>
-                    <div className="font-sans text-[11px] text-vanta-600 uppercase tracking-[3px] mb-2">
+                  <div className="relative z-10">
+                    <div className="font-sans text-[11px] text-vanta-600 uppercase tracking-[3px] mb-2 group-hover:text-luxury-gold/60 transition-colors">
                       Module {String(i + 1).padStart(2, '0')}
                     </div>
                     <h2 className="font-display text-2xl text-white mb-2 group-hover:text-luxury-gold transition-colors">
                       {mod.title}
                     </h2>
-                    <p className="font-sans text-vanta-400 text-sm leading-relaxed">
+                    <p className="font-sans text-vanta-400 text-sm leading-relaxed group-hover:text-white/80 transition-colors">
                       {mod.subtitle}
                     </p>
                   </div>
@@ -408,11 +412,18 @@ export default function Education() {
             </div>
 
             {!isPro ? (
-              /* Pro Gate — full page lock */
               <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
-                <div className="glassmorphism-card p-14 max-w-[500px] border-luxury-gold/30 shadow-[0_0_60px_rgba(212,175,55,0.12)]">
-                  <div className="w-20 h-20 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center mx-auto mb-8">
-                    <Lock size={28} className="text-luxury-gold" />
+                <div 
+                  className="glassmorphism-card spotlight-card p-14 max-w-[500px] border border-luxury-gold/30 hover:border-luxury-gold/60 shadow-[0_0_60px_rgba(212,175,55,0.12)] transition-all duration-500 rounded-3xl relative overflow-hidden"
+                  onMouseMove={e => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+                    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+                  }}
+                >
+                  <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-3xl z-0"></div>
+                  <div className="relative z-10 w-20 h-20 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+                    <Lock size={28} className="text-luxury-gold drop-shadow-[0_0_15px_rgba(212,175,55,0.8)]" />
                   </div>
                   <h2 className="font-display text-3xl text-white mb-4">Access Locked</h2>
                   <p className="font-sans text-vanta-400 text-sm mb-10 leading-relaxed">
@@ -421,13 +432,14 @@ export default function Education() {
                   </p>
                   <button
                     onClick={() => navigate('/#plans')}
-                    className="w-full bg-luxury-gold text-black font-sans font-bold text-[11px] tracking-[3px] uppercase py-4 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all"
+                    className="w-full bg-luxury-gold text-black font-sans font-bold text-[11px] tracking-[3px] uppercase py-4 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all relative z-10 group overflow-hidden"
                   >
-                    Upgrade to Pro
+                    <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%)] translate-x-[-150%] animate-shimmer group-hover:animate-none"></span>
+                    <span className="relative z-10">Upgrade to Pro</span>
                   </button>
                   <button
                     onClick={() => setActiveModule(null)}
-                    className="mt-4 font-sans text-[11px] text-vanta-500 hover:text-white transition-colors uppercase tracking-widest"
+                    className="mt-4 font-sans text-[11px] text-vanta-500 hover:text-white transition-colors uppercase tracking-widest relative z-10"
                   >
                     Return to Curriculum
                   </button>
