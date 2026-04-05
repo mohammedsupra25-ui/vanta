@@ -280,7 +280,7 @@ export default function AnalysisDetail() {
                           className="font-display text-white/50 select-none"
                           style={{ fontSize: 'clamp(17px, 2vw, 21px)', lineHeight: 1.75, filter: 'blur(6px)' }}
                         >
-                          {analysis.waveCount}
+                          This content is available exclusively for Pro members. Upgrade to unlock full wave count analysis.
                         </p>
                         <Link
                           to={overlayType === 'login' ? '/login' : '/signup'}

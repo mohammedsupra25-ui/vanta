@@ -36,8 +36,24 @@ export default function Signup() {
       setError('Passwords do not match')
       return
     }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters')
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters')
+      return
+    }
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain at least one uppercase letter')
+      return
+    }
+    if (!/[a-z]/.test(password)) {
+      setError('Password must contain at least one lowercase letter')
+      return
+    }
+    if (!/[0-9]/.test(password)) {
+      setError('Password must contain at least one number')
+      return
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      setError('Password must contain at least one special character')
       return
     }
 
@@ -136,7 +152,7 @@ export default function Signup() {
               style={{ border: '1px solid rgba(255,255,255,0.15)' }}
               onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)')}
               onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}
-              placeholder="Min. 6 characters"
+              placeholder="Min. 8 chars, upper + lower + number + special"
             />
           </div>
 

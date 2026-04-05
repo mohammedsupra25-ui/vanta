@@ -280,7 +280,7 @@ function AnalysisCard({ post, isPro = false, isLoggedIn = false }: { post: Analy
           </p>
         ) : (
           <p className="font-sans text-vanta-600 mb-4 leading-relaxed select-none" style={{ fontSize: '13px', filter: 'blur(4px)' }}>
-            {preview || 'Wave count analysis and trade thesis available to pro members only.'}
+            Wave count analysis and trade thesis available to pro members only.
           </p>
         )}
 
@@ -343,7 +343,6 @@ export default function Analysis() {
     }`
     client.fetch<AnalysisPost[]>(query)
       .then(data => {
-        console.log(data)
         setAnalyses(data?.length ? data : mockAnalyses)
       })
       .catch(() => {
@@ -554,7 +553,7 @@ export default function Analysis() {
                           </p>
                         ) : (
                           <p className="font-sans text-vanta-400 leading-relaxed select-none" style={{ fontSize: '14px', filter: 'blur(5px)' }}>
-                            {featured.waveCount}
+                            This content is available exclusively for Pro members.
                           </p>
                         )}
                       </div>
