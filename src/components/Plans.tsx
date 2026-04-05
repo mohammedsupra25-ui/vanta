@@ -85,49 +85,48 @@ export default function Plans() {
         </div>
 
         <div className="flex justify-center">
-          <div ref={cardRef} className="w-full max-w-[480px] opacity-0" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-            <div className="glassmorphism-card spotlight-card relative flex flex-col h-full p-10 group overflow-hidden border border-white/5 hover:border-luxury-gold/50 transition-colors duration-500 rounded-2xl">
+          <div ref={cardRef} className="w-full max-w-[500px] opacity-0" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+            <div className="bento-card spotlight-card relative flex flex-col h-full !p-12 group overflow-hidden border border-white/[0.03] hover:border-luxury-gold/30 transition-all duration-700">
               {/* Ambient inner glow on hover */}
-              <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-luxury-gold/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               
-              <div className="absolute top-6 right-6 font-sans font-bold text-black bg-[linear-gradient(135deg,#F3E5AB,#D4AF37)] text-[9px] tracking-[2px] uppercase px-3 py-1.5 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">
-                Pro
+              <div className="absolute top-8 right-8 font-sans font-bold text-black bg-luxury-gold text-[8px] tracking-[2px] uppercase px-3 py-1.5 z-10 rounded-sm">
+                Active
               </div>
 
-              <div className="label-caps mb-4 z-10 text-luxury-gold font-bold">Vanta Pro</div>
+              <div className="label-caps mb-6 z-10 text-white/40 font-bold" style={{ fontSize: '9px' }}>Subscription Tier</div>
 
-              <div className="flex items-end gap-1 mb-2 z-10">
+              <div className="flex items-baseline gap-2 mb-4 z-10">
                 <span
                   className="font-display font-semibold text-white"
-                  style={{ fontSize: 'clamp(36px, 4vw, 52px)', lineHeight: 1 }}
+                  style={{ fontSize: 'clamp(48px, 5vw, 64px)', lineHeight: 1, letterSpacing: '-0.02em' }}
                 >
                   $49
                 </span>
-                <span className="font-sans text-vanta-400 text-sm mb-1">/mo</span>
+                <span className="font-sans text-white/30 text-xs tracking-[1px] uppercase">/ Monthly Access</span>
               </div>
 
-              <p className="font-sans text-vanta-400 text-[13px] mb-8 mt-2 leading-relaxed z-10">
-                Full access to every analysis — wave counts, trade scenarios, entry & exit levels, and post-trade notes.
+              <p className="font-sans text-vanta-400 text-[14px] mb-10 leading-relaxed z-10 max-w-[360px]">
+                Institutional-grade access to every wave count, trade scenario, and real-time market update.
               </p>
 
-              <div className="border-t border-white/[0.06] mb-8 z-10" />
+              <div className="h-px bg-white/[0.04] mb-10 z-10" />
 
-              <ul className="flex flex-col flex-1 mb-10 z-10">
+              <ul className="flex flex-col flex-1 mb-12 z-10">
                 {proFeatures.map((f, i) => (
                   <li
                     key={i}
-                    className="flex items-center justify-between py-3.5 group-hover:border-luxury-gold/20 transition-colors duration-300"
-                    style={{ borderBottom: i < proFeatures.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+                    className="flex items-center justify-between py-4 transition-colors duration-300"
+                    style={{ borderBottom: i < proFeatures.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none' }}
                   >
-                    <span className="font-sans text-vanta-400 text-[13px]">{f.label}</span>
-                    <span className="font-sans font-semibold text-white/90 text-[13px]">{f.value}</span>
+                    <span className="font-sans text-white/40 text-[12px] tracking-[0.5px]">{f.label}</span>
+                    <span className="font-mono font-medium text-white/90 text-[12px]" style={{ fontFamily: "'IBM Plex Sans', monospace" }}>{f.value}</span>
                   </li>
                 ))}
               </ul>
 
-              <button className="w-full font-sans font-bold text-[11px] tracking-[2.5px] uppercase py-4 border border-luxury-gold bg-transparent text-luxury-gold hover:bg-luxury-gold hover:text-black shadow-[0_0_15px_rgba(212,175,55,0.1)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 z-10 rounded-sm relative overflow-hidden group/btn">
-                <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%)] translate-x-[-150%] group-hover/btn:animate-shimmer"></span>
-                Subscribe Now
+              <button className="btn-primary btn-gold w-full !py-5 !text-[10px] !tracking-[3px] z-10">
+                Initiate Subscription
               </button>
             </div>
           </div>

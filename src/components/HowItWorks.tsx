@@ -81,19 +81,33 @@ export default function HowItWorks() {
           </h2>
         </div>
 
-        <div className="bento-grid gap-6">
+        <div className="grid grid-cols-12 gap-6">
           {steps.map((step, i) => (
-            <div key={i} ref={el => { stepsRef.current[i] = el }} onMouseMove={(e) => handleMouseMove(e, i)} className="glassmorphism-card spotlight-card col-span-12 md:col-span-4 opacity-0 relative group p-10 border border-white/5 hover:border-luxury-gold/50 transition-colors duration-500 rounded-2xl">
-              <div className="absolute inset-0 bg-luxury-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl"></div>
+            <div 
+              key={i} 
+              ref={el => { stepsRef.current[i] = el }} 
+              onMouseMove={(e) => handleMouseMove(e, i)} 
+              className="bento-card spotlight-card col-span-12 md:col-span-4 opacity-0 relative group p-10 transition-all duration-700"
+            >
               <div className="flex flex-col h-full z-10 relative">
-                <div
-                  className="font-display font-light select-none mb-8 transition-all duration-700 group-hover:text-luxury-gold drop-shadow-sm group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.8)] mix-blend-plus-lighter"
-                  style={{ fontSize: 'clamp(56px, 7vw, 84px)', lineHeight: 1, letterSpacing: '-0.03em', color: 'rgba(255,255,255,0.08)' }}
-                >
-                  {step.num}
+                <div className="flex justify-between items-start mb-12">
+                  <span className="font-mono text-[10px] tracking-[3px] text-white/30 uppercase" style={{ fontFamily: "'IBM Plex Sans', monospace" }}>
+                    Phase {step.num}
+                  </span>
+                  <div className="w-8 h-px bg-white/[0.08]" />
                 </div>
-                <h3 className="font-sans font-bold text-white mb-3 mt-auto group-hover:text-luxury-gold-light transition-colors duration-300" style={{ fontSize: '20px' }}>{step.title}</h3>
-                <p className="font-sans text-vanta-400 leading-relaxed group-hover:text-white/80 transition-colors duration-300" style={{ fontSize: '14px' }}>{step.desc} </p>
+                
+                <h3 className="font-sans font-bold text-white mb-4 group-hover:text-luxury-gold transition-colors duration-300" style={{ fontSize: '22px', letterSpacing: '-0.01em' }}>
+                  {step.title}
+                </h3>
+                
+                <p className="font-sans text-vanta-400 leading-relaxed mb-8" style={{ fontSize: '14px', fontFamily: "'IBM Plex Sans', sans-serif" }}>
+                  {step.desc}
+                </p>
+
+                <div className="mt-auto pt-6 border-t border-white/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="font-mono text-[9px] tracking-[2px] text-luxury-gold uppercase">System Protocol Active</span>
+                </div>
               </div>
             </div>
           ))}

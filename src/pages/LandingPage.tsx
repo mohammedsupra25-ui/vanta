@@ -35,9 +35,9 @@ export default function LandingPage() {
         <Hero />
         <TrustBar />
         <Stats />
-        <Plans />
         <HowItWorks />
         <Testimonials />
+        <Plans />
         <FAQ />
         <FooterCTA />
       </main>

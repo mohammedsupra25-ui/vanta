@@ -180,34 +180,33 @@ export default function Hero() {
 
         <p
           ref={subRef}
-          className="mt-10 font-sans font-normal text-vanta-400 max-w-[500px] leading-relaxed opacity-0"
-          style={{ fontSize: '17px' }}
+          className="mt-8 font-sans font-normal text-vanta-400 max-w-[540px] leading-relaxed opacity-0 text-balance"
+          style={{ fontSize: '16px', letterSpacing: '0.01em' }}
         >
-          Institutional-grade market analysis. Delivered before the move. Built for traders who demand an edge.
+          Institutional-grade market analysis. Delivered before the move. <br className="hidden md:block" /> Built for traders who demand an absolute edge.
         </p>
 
-        <div ref={ctaRef} className="mt-12 flex flex-col sm:flex-row items-center gap-4 opacity-0 relative z-20">
+        <div ref={ctaRef} className="mt-14 flex flex-col sm:flex-row items-center gap-6 opacity-0 relative z-20">
           <button
-            className="btn-primary flex items-center gap-2 group transition-all duration-300 relative overflow-hidden"
+            className="btn-primary group"
             onClick={() => document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] translate-x-[-150%] animate-shimmer group-hover:animate-none"></span>
-            <span className="relative z-10 flex items-center gap-2">
-              Get The Edge
-              <ChevronDown size={14} className="group-hover:translate-x-1 group-hover:text-black transition-transform" style={{ transform: 'rotate(-90deg)' }}/>
-            </span>
+            Get The Edge
+            <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
           </button>
+          
           <button
-            className="btn-secondary group transition-all duration-300"
+            className="btn-secondary"
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            See How It Works
+            Methodology
           </button>
+
           <Link
             to="/analysis"
-            className="font-sans text-white/40 text-[11px] tracking-[2px] uppercase hover:text-white transition-colors duration-300 no-underline"
+            className="font-sans text-white/30 text-[10px] tracking-[2px] uppercase hover:text-white transition-all duration-300 no-underline"
           >
-            Explore Analysis →
+            Live Analysis
           </Link>
         </div>
       </div>

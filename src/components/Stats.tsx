@@ -83,16 +83,40 @@ export default function Stats() {
           <span className="label-caps">By the Numbers</span>
         </div>
 
-        <div className="bento-grid">
-          {stats.map((s, i) => (
-            <div key={i} className="bento-card spotlight-card col-span-12 md:col-span-3 opacity-0 stat-card group">
-              <div className="mb-8" style={{ width: '40px', height: '2px', background: 'rgba(255,255,255,0.15)', transition: 'background 0.3s ease' }} />
-              <div className="mini-stat-label">{s.label}</div>
-              <div className="mini-stat-value mt-auto">
-                <span ref={el => { numRefs.current[i] = el }}>{s.final}</span>
-              </div>
+        <div className="grid grid-cols-12 gap-6">
+          {/* Main Accuracy Stat */}
+          <div className="bento-card spotlight-card col-span-12 md:col-span-8 opacity-0 stat-card group min-h-[220px]">
+            <div className="mini-stat-label">System Performance</div>
+            <div className="mini-stat-value mt-auto">
+              <span ref={el => { numRefs.current[0] = el }} className="font-mono tracking-tighter" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>{stats[0].final}</span>
             </div>
-          ))}
+            <div className="mt-4 font-sans text-white/30 text-[11px] tracking-[1px] uppercase">Verified Accuracy Rate</div>
+          </div>
+
+          <div className="bento-card spotlight-card col-span-12 md:col-span-4 opacity-0 stat-card group min-h-[220px]">
+            <div className="mini-stat-label">Markets</div>
+            <div className="mini-stat-value mt-auto">
+              <span ref={el => { numRefs.current[2] = el }} className="font-mono tracking-tighter" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>{stats[2].final}</span>
+            </div>
+            <div className="mt-4 font-sans text-white/30 text-[11px] tracking-[1px] uppercase">Active Coverage</div>
+          </div>
+
+          <div className="bento-card spotlight-card col-span-12 md:col-span-4 opacity-0 stat-card group min-h-[220px]">
+            <div className="mini-stat-label">Output</div>
+            <div className="mini-stat-value mt-auto">
+              <span ref={el => { numRefs.current[1] = el }} className="font-mono tracking-tighter" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>{stats[1].final}</span>
+            </div>
+            <div className="mt-4 font-sans text-white/30 text-[11px] tracking-[1px] uppercase">Research Pieces</div>
+          </div>
+
+          <div className="bento-card spotlight-card col-span-12 md:col-span-8 opacity-0 stat-card group min-h-[220px]">
+            <div className="mini-stat-label">Community</div>
+            <div className="mini-stat-value mt-auto flex items-baseline gap-4">
+              <span ref={el => { numRefs.current[3] = el }} className="font-mono tracking-tighter" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>{stats[3].final}</span>
+              <div className="w-[120px] h-[1px] bg-white/[0.05]" />
+            </div>
+            <div className="mt-4 font-sans text-white/30 text-[11px] tracking-[1px] uppercase">Active Institutions & Traders</div>
+          </div>
         </div>
       </div>
     </section>

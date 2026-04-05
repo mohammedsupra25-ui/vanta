@@ -33,16 +33,18 @@ export default function Nav() {
       if (!nav) return
       if (window.scrollY > 50 && !isScrolled.current) {
         isScrolled.current = true
-        nav.style.background = 'rgba(0,0,0,0.85)'
-        nav.style.backdropFilter = 'blur(20px)'
-        ;(nav.style as CSSStyleDeclaration & { webkitBackdropFilter: string }).webkitBackdropFilter = 'blur(20px)'
-        nav.style.borderBottom = '1px solid rgba(255,255,255,0.05)'
+        nav.style.background = 'rgba(0,0,0,0.8)'
+        nav.style.backdropFilter = 'blur(24px)'
+        ;(nav.style as CSSStyleDeclaration & { webkitBackdropFilter: string }).webkitBackdropFilter = 'blur(24px)'
+        nav.style.borderBottom = '1px solid rgba(255,255,255,0.03)'
+        nav.style.height = '64px'
       } else if (window.scrollY <= 50 && isScrolled.current) {
         isScrolled.current = false
         nav.style.background = 'transparent'
         nav.style.backdropFilter = 'none'
         ;(nav.style as CSSStyleDeclaration & { webkitBackdropFilter: string }).webkitBackdropFilter = 'none'
         nav.style.borderBottom = 'none'
+        nav.style.height = '72px'
       }
     }
 
@@ -75,9 +77,9 @@ export default function Nav() {
       <nav
         ref={navRef}
         style={{ opacity: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out"
       >
-        <div className="max-w-[1400px] mx-auto px-8 md:px-12 h-[72px] flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-8 md:px-12 h-full flex items-center justify-between">
           {/* Wordmark */}
           <Link
             to="/"
@@ -128,7 +130,7 @@ export default function Nav() {
                 </Link>
                 <Link
                   to="/signup"
-                  className="font-sans font-bold text-luxury-gold border border-luxury-gold/40 px-6 py-2.5 text-[10px] tracking-[2px] uppercase transition-all duration-300 hover:bg-luxury-gold hover:text-black hover:border-luxury-gold no-underline shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]"
+                  className="btn-primary btn-gold !px-6 !py-2.5 !text-[10px] no-underline"
                 >
                   Get Access
                 </Link>
