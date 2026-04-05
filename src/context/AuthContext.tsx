@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: {
         data: { plan: 'free' },
-        emailRedirectTo: 'https://vanta-swart.vercel.app/login',
+        emailRedirectTo: `${window.location.origin}/login`,
       },
     })
     return { error: error?.message ?? null }

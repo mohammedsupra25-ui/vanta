@@ -6,9 +6,11 @@ import Education from './pages/Education'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { AuthProvider } from './context/AuthContext'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <div className="grain-overlay" aria-hidden />
       <BrowserRouter>
@@ -22,6 +24,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </ErrorBoundary>
   )
 }
 

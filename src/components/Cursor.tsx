@@ -9,6 +9,11 @@ export default function Cursor() {
   const rafRef = useRef<number>(0)
 
   useEffect(() => {
+    // Disable on touch devices or when user prefers reduced motion
+    const isTouch = matchMedia('(pointer: coarse)').matches
+    const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (isTouch || prefersReducedMotion) return
+
     const hBar = hBarRef.current
     const vBar = vBarRef.current
     const ring = ringRef.current

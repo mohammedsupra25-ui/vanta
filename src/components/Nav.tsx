@@ -53,14 +53,22 @@ export default function Nav() {
   const scrollTo = (id: string) => {
     setMobileOpen(false)
     if (location.pathname !== '/') {
-      navigate('/')
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-      }, 150)
+      navigate('/#' + id)
     } else {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
     }
   }
+
+  // Handle hash scrolling after navigation
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      const id = location.hash.slice(1)
+      const el = document.getElementById(id)
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100)
+      }
+    }
+  }, [location])
 
   return (
     <>

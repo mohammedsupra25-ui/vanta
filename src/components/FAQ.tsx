@@ -49,6 +49,7 @@ function FAQItem({ faq }: { faq: typeof faqs[0] }) {
       <button
         className="w-full flex items-center justify-between py-6 text-left group"
         onClick={() => setOpen(prev => !prev)}
+        aria-expanded={open}
       >
         <span
           className="font-sans font-medium text-white group-hover:text-vanta-200 transition-colors duration-200 pr-8"
